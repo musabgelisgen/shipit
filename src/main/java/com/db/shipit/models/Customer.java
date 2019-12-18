@@ -1,47 +1,26 @@
 package com.db.shipit.models;
 
-public class Customer {
+public class Customer extends User{
 
-    String firstName;
-    String lastName;
-    String email;
-    String password;
-    String city;
+    private String city;
+    private int credits;
+    private int phoneNumber;
+    private String address;
 
-    public String getFirstName() {
-        return firstName;
+    public Customer (){}
+
+    public Customer(String ID, String email, String encryptedPassword, String firstName, String lastName,
+                    String city, int credits, int phoneNumber, String address) {
+        super(ID, email, encryptedPassword, firstName, lastName);
+        this.city = city;
+        this.credits = credits;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
     }
 
-    public Customer setFirstName(String firstName) {
-        this.firstName = firstName;
-        return this;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public Customer setLastName(String lastName) {
-        this.lastName = lastName;
-        return this;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public Customer setEmail(String email) {
-        this.email = email;
-        return this;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public Customer setPassword(String password) {
-        this.password = password;
-        return this;
+    public Customer(String city, int credits) {
+        this.city = city;
+        this.credits = credits;
     }
 
     public String getCity() {
@@ -53,15 +32,55 @@ public class Customer {
         return this;
     }
 
+    public int getCredits() {
+        return credits;
+    }
+
+    public Customer setCredits(int credits) {
+        this.credits = credits;
+        return this;
+    }
+
+    public int getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public Customer setPhoneNumber(int phoneNumber) {
+        this.phoneNumber = phoneNumber;
+        return this;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public Customer setAddress(String address) {
+        this.address = address;
+        return this;
+    }
+
     @Override
-    public String toString() {
-        return "Customer{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", city='" + city + '\'' +
-                '}';
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        Customer customer = (Customer) o;
+
+        if (credits != customer.credits) return false;
+        if (phoneNumber != customer.phoneNumber) return false;
+        if (city != null ? !city.equals(customer.city) : customer.city != null) return false;
+        return address != null ? address.equals(customer.address) : customer.address == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (city != null ? city.hashCode() : 0);
+        result = 31 * result + credits;
+        result = 31 * result + phoneNumber;
+        result = 31 * result + (address != null ? address.hashCode() : 0);
+        return result;
     }
 }
 

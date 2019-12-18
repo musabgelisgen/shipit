@@ -11,13 +11,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/register")
 public class CustomerController {
 
     @Autowired
     CustomerRepository customerRepository;
 
-    @GetMapping("")
+    @GetMapping("/register")
     public String register(Model model){
         String[] cities = new String[]{"Ankara", "Istanbul", "Izmir"};
         model.addAttribute("cities", cities);
@@ -26,11 +25,13 @@ public class CustomerController {
         return "customer_register";
     }
 
-    @PostMapping("")
+    @PostMapping("/register")
     public String register_post(Model model, @ModelAttribute("customer") Customer customer){
         System.out.println(customer);
 
-//        customerRepository.save();
+        customerRepository.save(customer);
         return "customer_register";
     }
+
+
 }

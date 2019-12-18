@@ -28,7 +28,7 @@
             <!-- Password-->
             <label class="control-label" for="password">Password</label>
             <div class="controls">
-                <input type="password" th:field="*{password}" id="password" name="password" placeholder="" class="input-xlarge">
+                <input type="password" th:field="*{encryptedPassword}" id="password" name="password" placeholder="" class="input-xlarge">
                 <p class="help-block">Password should be at least 4 characters</p>
             </div>
         </div>
@@ -54,6 +54,23 @@
                 <option th:value="0" selected>Choose a city...</option>
                 <option th:each="city : ${cities}" th:value="${city}" th:text="${city}">
             </select>
+        </div>
+
+        <div class="control-group">
+            <!-- Address -->
+            <label class="control-label"  for="address">Address</label>
+            <div class="controls">
+            <!-- <input type="text" th:field="*{address}" id="address" name="address" placeholder="" class="input-xlarge"> -->
+                <textarea class="form-control" th:field="*{address}" id="address" name="address" rows="3"></textarea>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <!-- Phone number -->
+            <label class="control-label"  for="phone">Phone</label>
+            <div class="controls">
+                <input type="text" th:field="*{phoneNumber}" id="phone" name="phone" placeholder="" class="input-xlarge">
+            </div>
         </div>
 
 
