@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+</head>
+<body>
+
+<form class="form-horizontal form-group col-md-4 col-md-offset-5 align-center" ACTION='#' th:action="@{/register}" th:object="${customer}" method="POST">
+    <fieldset>
+        <div id="legend">
+            <legend class="">Register</legend>
+        </div>
+
+        <div class="control-group">
+            <!-- E-mail -->
+            <label class="control-label" for="email">E-mail</label>
+            <div class="controls">
+                <input type="text" th:field="*{email}" id="email" name="email" placeholder="" class="input-xlarge">
+                <p class="help-block">Please provide your E-mail</p>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <!-- Password-->
+            <label class="control-label" for="password">Password</label>
+            <div class="controls">
+                <input type="password" th:field="*{password}" id="password" name="password" placeholder="" class="input-xlarge">
+                <p class="help-block">Password should be at least 4 characters</p>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <!-- Firstname -->
+            <label class="control-label"  for="firstname">First Name</label>
+            <div class="controls">
+                <input type="text" th:field="*{firstName}" id="firstname" name="firstname" placeholder="" class="input-xlarge">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <!-- Lastname -->
+            <label class="control-label"  for="lastname">Last Name</label>
+            <div class="controls">
+                <input type="text" th:field="*{lastName}" id="lastname" name="lastname" placeholder="" class="input-xlarge">
+            </div>
+        </div>
+
+        <div class="input-group mb-3 control-group">
+            <select th:field="*{city}" class="custom-select controls" id="inputGroupSelect01">
+                <option th:value="0" selected>Choose a city...</option>
+                <option th:each="city : ${cities}" th:value="${city}" th:text="${city}">
+            </select>
+        </div>
+
+
+        <div class="control-group">
+            <!-- Button -->
+            <div class="controls">
+                <button class="btn btn-success">Register</button>
+            </div>
+        </div>
+    </fieldset>
+</form>
+</body>
+</html>
