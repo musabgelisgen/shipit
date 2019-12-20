@@ -1,5 +1,6 @@
 package com.db.shipit.controllers;
 
+import com.db.shipit.models.Customer;
 import com.db.shipit.models.User;
 import com.db.shipit.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +27,16 @@ public class LoginController {
 
     @PostMapping("")
     public String checkCredentials (Model model, @ModelAttribute("user") User user){
-        Optional<User> user1 = userRepository.checkCredentials(user);
-        user1.ifPresent(System.out::println);
+        User user1 = userRepository.checkCredentials(user);
+
+        if (user1 != null){
+            System.out.println(user1);
+        }
 
         return "login";
     }
 }
+
+//todo: determine if user is customer or customer service
+//todo: then create session depending on the type
+//todo: redirect to index page

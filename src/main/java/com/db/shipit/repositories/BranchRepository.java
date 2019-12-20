@@ -1,8 +1,6 @@
 package com.db.shipit.repositories;
 
 import com.db.shipit.models.Branch;
-import com.db.shipit.models.User;
-import com.db.shipit.utils.PasswordEncryption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;

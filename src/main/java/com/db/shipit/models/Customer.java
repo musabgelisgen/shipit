@@ -60,6 +60,16 @@ public class Customer extends User{
     }
 
     @Override
+    public String toString() {
+        return "Customer{" +
+                "city='" + city + '\'' +
+                ", credits=" + credits +
+                ", phoneNumber=" + phoneNumber +
+                ", address='" + address + '\'' +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
