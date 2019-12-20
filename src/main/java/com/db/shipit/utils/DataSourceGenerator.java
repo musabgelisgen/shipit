@@ -52,6 +52,14 @@ public class DataSourceGenerator {
                 "PRIMARY KEY(name)," +
                 "UNIQUE KEY(city_name));");
 
+        statement.executeUpdate("INSERT INTO Branch VALUES" +
+                "('Bilkent', 'Ankara')," +
+                "('Kadikoy', 'Istanbul')," +
+                "('Cesme', 'Izmir')," +
+                "('Finike', 'Antalya')," +
+                "('Datca', 'Bodrum')," +
+                "('Of', 'Trabzon')");
+
 
         statement.executeUpdate("CREATE TABLE User(" +
                 "ID CHAR(6)," +

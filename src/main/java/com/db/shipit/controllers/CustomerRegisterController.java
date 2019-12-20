@@ -1,6 +1,8 @@
 package com.db.shipit.controllers;
 
+import com.db.shipit.models.Branch;
 import com.db.shipit.models.Customer;
+import com.db.shipit.repositories.BranchRepository;
 import com.db.shipit.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,15 +12,21 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Controller
-public class CustomerController {
+public class CustomerRegisterController {
 
     @Autowired
     CustomerRepository customerRepository;
 
+    @Autowired
+    BranchRepository branchRepository;
+
     @GetMapping("/register")
     public String register(Model model){
-        String[] cities = new String[]{"Ankara", "Istanbul", "Izmir"};
+        List<String> cities = branchRepository.getAllBranches().stream().map(Branch::getCity_name).collect(Collectors.toList());
         model.addAttribute("cities", cities);
         model.addAttribute("customer", new Customer());
 

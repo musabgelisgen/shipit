@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Register</title>
+    <link href="register.css" rel="stylesheet"/>
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -17,35 +18,33 @@
 
         <div class="control-group">
             <!-- E-mail -->
-            <label class="control-label" for="email">E-mail</label>
+<!--            <label class="control-label" for="email">E-mail</label>-->
             <div class="controls">
-                <input type="text" th:field="*{email}" id="email" name="email" placeholder="" class="input-xlarge">
-                <p class="help-block">Please provide your E-mail</p>
+                <input type="text" th:field="*{email}" id="email" name="email" placeholder="email" class="input-xlarge">
             </div>
         </div>
 
         <div class="control-group">
             <!-- Password-->
-            <label class="control-label" for="password">Password</label>
+<!--            <label class="control-label" for="password">Password</label>-->
             <div class="controls">
-                <input type="password" th:field="*{encryptedPassword}" id="password" name="password" placeholder="" class="input-xlarge">
-                <p class="help-block">Password should be at least 4 characters</p>
+                <input type="password" th:field="*{encryptedPassword}" id="password" name="password" placeholder="password" class="input-xlarge">
             </div>
         </div>
 
         <div class="control-group">
             <!-- Firstname -->
-            <label class="control-label"  for="firstname">First Name</label>
+<!--            <label class="control-label"  for="firstname">First Name</label>-->
             <div class="controls">
-                <input type="text" th:field="*{firstName}" id="firstname" name="firstname" placeholder="" class="input-xlarge">
+                <input type="text" th:field="*{firstName}" id="firstname" name="firstname" placeholder="first name" class="input-xlarge">
             </div>
         </div>
 
         <div class="control-group">
             <!-- Lastname -->
-            <label class="control-label"  for="lastname">Last Name</label>
+<!--            <label class="control-label"  for="lastname">Last Name</label>-->
             <div class="controls">
-                <input type="text" th:field="*{lastName}" id="lastname" name="lastname" placeholder="" class="input-xlarge">
+                <input type="text" th:field="*{lastName}" id="lastname" name="lastname" placeholder="last name" class="input-xlarge">
             </div>
         </div>
 
@@ -58,18 +57,18 @@
 
         <div class="control-group">
             <!-- Address -->
-            <label class="control-label"  for="address">Address</label>
+<!--            <label class="control-label"  for="address">Address</label>-->
             <div class="controls">
             <!-- <input type="text" th:field="*{address}" id="address" name="address" placeholder="" class="input-xlarge"> -->
-                <textarea class="form-control" th:field="*{address}" id="address" name="address" rows="3"></textarea>
+                <textarea class="form-control" th:field="*{address}" id="address" name="address" rows="3" placeholder="Address..."></textarea>
             </div>
         </div>
 
         <div class="control-group">
             <!-- Phone number -->
-            <label class="control-label"  for="phone">Phone</label>
+<!--            <label class="control-label"  for="phone">Phone</label>-->
             <div class="controls">
-                <input type="text" th:field="*{phoneNumber}" id="phone" name="phone" placeholder="" class="input-xlarge">
+                <input type="text" th:field="*{phoneNumber}" id="phone" name="phone" placeholder="phone number" class="input-xlarge">
             </div>
         </div>
 
