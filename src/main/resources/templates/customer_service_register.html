@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Service Register</title>
+    <link href="register.css" rel="stylesheet"/>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="w-25 center_div">
+    <form class="text-center border border-light p-5 center_div" ACTION='#' th:action="@{/cs_register}" th:object="${customer_service}" method="POST">
+
+        <div id="legend">
+            <legend class="">Customer Service Register</legend>
+        </div>
+
+
+        <input class="form-control mb-4" type="text" th:field="*{email}" id="email" name="email" placeholder="email">
+
+        <input class="form-control mb-4" type="password" th:field="*{encryptedPassword}" id="password" name="password" placeholder="password">
+
+        <input class="form-control mb-4" type="text" th:field="*{firstName}" id="firstname" name="firstname" placeholder="first name">
+
+        <input class="form-control mb-4" type="text" th:field="*{lastName}" id="lastname" name="lastname" placeholder="last name">
+
+        <div class="input-group mb-3 control-group">
+            <select th:field="*{branchName}" class="custom-select controls" id="inputGroupSelect01">
+                <option th:value="0" selected>Choose a branch...</option>
+                <option th:each="branch : ${branches}" th:value="${branch}" th:text="${branch}">
+            </select>
+        </div>
+
+        <input class="form-control mb-4" type="text" th:field="*{salary}" value="0" id="phone" name="phone" placeholder="salary">
+
+
+        <button class="btn btn-success">Register</button>
+    </form>
+</div>
+</body>
+</html>

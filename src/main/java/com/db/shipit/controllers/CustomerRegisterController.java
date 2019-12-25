@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,7 +36,7 @@ public class CustomerRegisterController {
     public String register_post(Model model, @ModelAttribute("customer") Customer customer){
         System.out.println(customer);
 
-        customerRepository.save(customer);
+        customerRepository.saveCustomer(customer);
         return "customer_register";
     }
 
