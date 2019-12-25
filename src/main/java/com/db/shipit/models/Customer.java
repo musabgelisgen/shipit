@@ -2,33 +2,33 @@ package com.db.shipit.models;
 
 public class Customer extends User{
 
-    private String city;
+    private String city_name;
     private int credits;
-    private int phoneNumber;
+    private int phone_number;
     private String address;
 
     public Customer (){}
 
     public Customer(String ID, String email, String encryptedPassword, String firstName, String lastName,
-                    String city, int credits, int phoneNumber, String address) {
+                    String city_name, int credits, int phone_number, String address) {
         super(ID, email, encryptedPassword, firstName, lastName);
-        this.city = city;
+        this.city_name = city_name;
         this.credits = credits;
-        this.phoneNumber = phoneNumber;
+        this.phone_number = phone_number;
         this.address = address;
     }
 
-    public Customer(String city, int credits) {
-        this.city = city;
+    public Customer(String city_name, int credits) {
+        this.city_name = city_name;
         this.credits = credits;
     }
 
-    public String getCity() {
-        return city;
+    public String getCity_name() {
+        return city_name;
     }
 
-    public Customer setCity(String city) {
-        this.city = city;
+    public Customer setCity_name(String city_name) {
+        this.city_name = city_name;
         return this;
     }
 
@@ -41,12 +41,12 @@ public class Customer extends User{
         return this;
     }
 
-    public int getPhoneNumber() {
-        return phoneNumber;
+    public int getPhone_number() {
+        return phone_number;
     }
 
-    public Customer setPhoneNumber(int phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public Customer setPhone_number(int phone_number) {
+        this.phone_number = phone_number;
         return this;
     }
 
@@ -70,9 +70,9 @@ public class Customer extends User{
     @Override
     public String toString() {
         return "Customer{" +
-                "city='" + city + '\'' +
+                "city='" + city_name + '\'' +
                 ", credits=" + credits +
-                ", phoneNumber=" + phoneNumber +
+                ", phoneNumber=" + phone_number +
                 ", address='" + address + '\'' +
                 '}';
     }
@@ -86,17 +86,17 @@ public class Customer extends User{
         Customer customer = (Customer) o;
 
         if (credits != customer.credits) return false;
-        if (phoneNumber != customer.phoneNumber) return false;
-        if (city != null ? !city.equals(customer.city) : customer.city != null) return false;
+        if (phone_number != customer.phone_number) return false;
+        if (city_name != null ? !city_name.equals(customer.city_name) : customer.city_name != null) return false;
         return address != null ? address.equals(customer.address) : customer.address == null;
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (city != null ? city.hashCode() : 0);
+        result = 31 * result + (city_name != null ? city_name.hashCode() : 0);
         result = 31 * result + credits;
-        result = 31 * result + phoneNumber;
+        result = 31 * result + phone_number;
         result = 31 * result + (address != null ? address.hashCode() : 0);
         return result;
     }

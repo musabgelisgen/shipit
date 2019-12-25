@@ -117,9 +117,9 @@ public class DataSourceGenerator {
                 "cost NUMERIC(10) NOT NULL," +
                 "CHECK(payment_side IN ('sender','receiver'))," +
                 "CHECK(payment_status IN ('paid','not paid'))," +
-                "CHECK(delivery_type IN ('normal','fast','super fast'))," +
+                "CHECK(delivery_type IN ('normal','fast','superfast'))," +
                 "CHECK(status IN ('preparing', 'onTransfer', 'onBranch', 'delivered', 'declined'))," +
-                " CHECK(package_type IN ('heavy','medium','lightweight'))," +
+                "CHECK(package_type IN ('heavy','medium','lightweight'))," +
                 "PRIMARY KEY(package_id)," +
                 "FOREIGN KEY(from_city) REFERENCES Branch(city_name)," +
                 "FOREIGN KEY(curr_city) REFERENCES Branch(city_name)," +
@@ -154,7 +154,7 @@ public class DataSourceGenerator {
                 "FOREIGN KEY(package_id) REFERENCES Package(package_id)," +
                 "CHECK(report_type IN ('damaged','missing','wrong'))," +
                 "CHECK(result IN (null,'positive','negative')));");
-        
+
         statement.executeUpdate("CREATE TABLE Message(" +
                 "report_id CHAR(6)," +
                 "message_number INTEGER," +
@@ -164,13 +164,6 @@ public class DataSourceGenerator {
                 "PRIMARY KEY(report_id,message_number)," +
                 "FOREIGN KEY(report_id) REFERENCES Report(report_id)," +
                 "FOREIGN KEY(sender) REFERENCES User(ID));");
-
-
-
-
-
-
-
 
     }
 }

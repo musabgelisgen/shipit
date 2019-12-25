@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import static com.db.shipit.ShipitApplication.currentUser;
+
 @Controller
 public class LoginController {
 
@@ -29,6 +31,7 @@ public class LoginController {
 
         if (user1 != null){
             System.out.println(user1);
+            currentUser = user1;
         }
 
         return "login";

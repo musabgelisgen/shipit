@@ -1,13 +1,11 @@
 package com.db.shipit.models;
 
-import java.util.Date;
-
 public class Package {
     String package_id;
     String receiver_id;
     String sender_id;
-    Date delivery_date;
-    Date send_date;
+    String delivery_date;
+    String send_date;
     String payment_side;
     String payment_status;
     String delivery_type;
@@ -46,20 +44,20 @@ public class Package {
         return this;
     }
 
-    public Date getDelivery_date() {
+    public String getDelivery_date() {
         return delivery_date;
     }
 
-    public Package setDelivery_date(Date delivery_date) {
+    public Package setDelivery_date(String delivery_date) {
         this.delivery_date = delivery_date;
         return this;
     }
 
-    public Date getSend_date() {
+    public String getSend_date() {
         return send_date;
     }
 
-    public Package setSend_date(Date send_date) {
+    public Package setSend_date(String send_date) {
         this.send_date = send_date;
         return this;
     }
@@ -69,7 +67,7 @@ public class Package {
     }
 
     public Package setPayment_side(String payment_side) {
-        this.payment_side = payment_side;
+        this.payment_side = payment_side.toLowerCase();
         return this;
     }
 
@@ -78,7 +76,7 @@ public class Package {
     }
 
     public Package setPayment_status(String payment_status) {
-        this.payment_status = payment_status;
+        this.payment_status = payment_status.toLowerCase();
         return this;
     }
 
@@ -87,7 +85,7 @@ public class Package {
     }
 
     public Package setDelivery_type(String delivery_type) {
-        this.delivery_type = delivery_type;
+        this.delivery_type = delivery_type.toLowerCase();
         return this;
     }
 
@@ -96,7 +94,7 @@ public class Package {
     }
 
     public Package setStatus(String status) {
-        this.status = status;
+        this.status = status.toLowerCase();
         return this;
     }
 

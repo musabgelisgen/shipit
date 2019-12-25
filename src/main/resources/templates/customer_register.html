@@ -26,7 +26,7 @@
         <input class="form-control mb-4" type="text" th:field="*{lastName}" id="lastname" name="lastname" placeholder="last name">
 
         <div class="input-group mb-3 control-group">
-            <select th:field="*{city}" class="custom-select controls" id="inputGroupSelect01">
+            <select th:field="*{city_name}" class="custom-select controls" id="inputGroupSelect01">
                 <option th:value="0" selected>Choose a city...</option>
                 <option th:each="city : ${cities}" th:value="${city}" th:text="${city}">
             </select>
@@ -34,7 +34,7 @@
 
         <textarea class="form-control mb-4" th:field="*{address}" id="address" name="address" rows="3" placeholder="Address..."></textarea>
 
-        <input class="form-control mb-4" type="text" th:field="*{phoneNumber}" value="+90" id="phone" name="phone" placeholder="phone number">
+        <input class="form-control mb-4" type="text" th:field="*{phone_number}" value="+90" id="phone" name="phone" placeholder="phone number">
 
 
         <button class="btn btn-success">Register</button>
