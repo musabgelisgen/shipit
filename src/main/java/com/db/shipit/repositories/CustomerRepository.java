@@ -3,12 +3,12 @@ package com.db.shipit.repositories;
 import com.db.shipit.models.Customer;
 import com.db.shipit.models.CustomerService;
 import com.db.shipit.utils.PasswordEncryption;
+import com.db.shipit.utils.RandomID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import java.util.List;
-import java.util.UUID;
 
 @Repository
 public class CustomerRepository {
@@ -17,7 +17,7 @@ public class CustomerRepository {
     private JdbcTemplate jdbcTemplate;
 
     public void saveCustomer(Customer customer) {
-        String id = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 6);
+        String id = RandomID.generateUUID();
         String encr_pass = PasswordEncryption.encryptPasswordUsingSHA256(customer.getEncryptedPassword());
 
         jdbcTemplate.update("insert into User values (?,?,?,?,?)", id, customer.getEmail(), encr_pass, customer.getFirstName(), customer.getLastName());
