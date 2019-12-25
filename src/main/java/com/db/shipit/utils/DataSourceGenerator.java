@@ -1,17 +1,11 @@
 package com.db.shipit.utils;
-
-import com.db.shipit.ShipitApplication;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
-import org.springframework.jdbc.core.JdbcTemplate;
-
 import java.sql.*;
 
 public class DataSourceGenerator {
 
-    static final String user = "root";
-    static final String password = "";
-    static final String url = "jdbc:mysql://localhost";
+    static final String user = "admin";
+    static final String password = "shipitadmin";
+    static final String url = "jdbc:mysql://shipit.czpq5tzr95ng.us-east-1.rds.amazonaws.com";
     static final String table_name = "/shipit";
 
     public static void main(String[] args) {
