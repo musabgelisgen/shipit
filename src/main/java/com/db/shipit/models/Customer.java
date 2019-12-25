@@ -59,6 +59,14 @@ public class Customer extends User{
         return this;
     }
 
+    public String getFullName(){
+        return getFirstName() + " " + getLastName();
+    }
+
+    public String getIdAndFullName(){
+        return getID() + "-" + getFullName();
+    }
+
     @Override
     public String toString() {
         return "Customer{" +

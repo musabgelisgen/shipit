@@ -4,6 +4,10 @@ public class Branch {
     private String name;
     private String city_name;
 
+    public String getBranchAndCityName(){
+        return getName() + "-" + getCity_name();
+    }
+
     public String getName() {
         return name;
     }

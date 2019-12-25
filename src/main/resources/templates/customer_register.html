@@ -4,49 +4,26 @@
     <meta charset="UTF-8">
     <title>Register</title>
     <link href="register.css" rel="stylesheet"/>
-    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </head>
 <body>
+<div class="w-25 center_div">
+    <form class="text-center border border-light p-5 center_div" ACTION='#' th:action="@{/register}" th:object="${customer}" method="POST">
 
-<form class="form-horizontal form-group col-md-4 col-md-offset-5 align-center" ACTION='#' th:action="@{/register}" th:object="${customer}" method="POST">
-    <fieldset>
         <div id="legend">
             <legend class="">Register</legend>
         </div>
 
-        <div class="control-group">
-            <!-- E-mail -->
-<!--            <label class="control-label" for="email">E-mail</label>-->
-            <div class="controls">
-                <input type="text" th:field="*{email}" id="email" name="email" placeholder="email" class="input-xlarge">
-            </div>
-        </div>
 
-        <div class="control-group">
-            <!-- Password-->
-<!--            <label class="control-label" for="password">Password</label>-->
-            <div class="controls">
-                <input type="password" th:field="*{encryptedPassword}" id="password" name="password" placeholder="password" class="input-xlarge">
-            </div>
-        </div>
+        <input class="form-control mb-4" type="text" th:field="*{email}" id="email" name="email" placeholder="email">
 
-        <div class="control-group">
-            <!-- Firstname -->
-<!--            <label class="control-label"  for="firstname">First Name</label>-->
-            <div class="controls">
-                <input type="text" th:field="*{firstName}" id="firstname" name="firstname" placeholder="first name" class="input-xlarge">
-            </div>
-        </div>
+        <input class="form-control mb-4" type="password" th:field="*{encryptedPassword}" id="password" name="password" placeholder="password">
 
-        <div class="control-group">
-            <!-- Lastname -->
-<!--            <label class="control-label"  for="lastname">Last Name</label>-->
-            <div class="controls">
-                <input type="text" th:field="*{lastName}" id="lastname" name="lastname" placeholder="last name" class="input-xlarge">
-            </div>
-        </div>
+        <input class="form-control mb-4" type="text" th:field="*{firstName}" id="firstname" name="firstname" placeholder="first name">
+
+        <input class="form-control mb-4" type="text" th:field="*{lastName}" id="lastname" name="lastname" placeholder="last name">
 
         <div class="input-group mb-3 control-group">
             <select th:field="*{city}" class="custom-select controls" id="inputGroupSelect01">
@@ -55,31 +32,13 @@
             </select>
         </div>
 
-        <div class="control-group">
-            <!-- Address -->
-<!--            <label class="control-label"  for="address">Address</label>-->
-            <div class="controls">
-            <!-- <input type="text" th:field="*{address}" id="address" name="address" placeholder="" class="input-xlarge"> -->
-                <textarea class="form-control" th:field="*{address}" id="address" name="address" rows="3" placeholder="Address..."></textarea>
-            </div>
-        </div>
+        <textarea class="form-control mb-4" th:field="*{address}" id="address" name="address" rows="3" placeholder="Address..."></textarea>
 
-        <div class="control-group">
-            <!-- Phone number -->
-<!--            <label class="control-label"  for="phone">Phone</label>-->
-            <div class="controls">
-                <input type="text" th:field="*{phoneNumber}" id="phone" name="phone" placeholder="phone number" class="input-xlarge">
-            </div>
-        </div>
+        <input class="form-control mb-4" type="text" th:field="*{phoneNumber}" value="+90" id="phone" name="phone" placeholder="phone number">
 
 
-        <div class="control-group">
-            <!-- Button -->
-            <div class="controls">
-                <button class="btn btn-success">Register</button>
-            </div>
-        </div>
-    </fieldset>
-</form>
+        <button class="btn btn-success">Register</button>
+    </form>
+</div>
 </body>
 </html>
