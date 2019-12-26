@@ -25,17 +25,13 @@ public class PackageRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public List<Package> getAllPackages(User user, Map<String, Integer> modifications) {
-        String id = user.getID();
+    public List<Package> getAllPackages(Map<String, Boolean> modifications) {
+        String id = currentUser.getID();
 
         List<Package> packages = jdbcTemplate.query("SELECT * FROM Package WHERE receiver_id = ? OR sender_id = ?", new Object[]{id, id},new BeanPropertyRowMapper(Package.class));
         return packages;
     }
 
-//Package{package_id='null', receiver_id='51572f-asd asd', sender_id='null',
-// delivery_date=null, send_date=null, payment_side='Sender', payment_status='null',
-// delivery_type='superfast', status='null', package_type='medium', courier='null',
-// from_city='Finike-Antalya', curr_city='null', to_city='null', cost=0.0}
     public void commitPackage(Package packet) {
         setPropertiesOfToInsert(packet);
 
@@ -76,6 +72,5 @@ public class PackageRepository {
                 .setFrom_city(from)
                 .setCurr_city(from)
                 .setTo_city(to_city);
-
     }
 }

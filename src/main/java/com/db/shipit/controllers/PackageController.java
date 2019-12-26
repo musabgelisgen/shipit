@@ -10,10 +10,7 @@ import com.db.shipit.repositories.PackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -52,16 +49,32 @@ public class PackageController {
     }
 
     @GetMapping("/packages")
-    public String getAllPackages (Model model){
-        User user = new User().setID("99c02f");
-        Map<String, Integer> modifications = new HashMap<>();
+    public String getAllPackages (
+            @RequestParam(value = "receiver", required = false, defaultValue = "false") boolean receiver,
+            @RequestParam(value = "sender", required = false, defaultValue = "false") boolean sender,
+            @RequestParam(value = "preparing", required = false, defaultValue = "false") boolean preparing,
+            @RequestParam(value = "onTransfer", required = false, defaultValue = "false") boolean onTransfer,
+            @RequestParam(value = "onBranch", required = false, defaultValue = "false") boolean onBranch,
+            @RequestParam(value = "delivered", required = false, defaultValue = "false") boolean delivered,
+            @RequestParam(value = "declined", required = false, defaultValue = "false") boolean declined,
+            Model model){
 
-        List<Package> packages = packageRepository.getAllPackages(user, modifications);
+        Map<String, Boolean> modifications = new HashMap<>();
+        modifications.put("receiver", receiver);
+        modifications.put("sender", sender);
+        modifications.put("preparing", preparing);
+        modifications.put("onTransfer", onTransfer);
+        modifications.put("onBranch", onBranch);
+        modifications.put("delivered", delivered);
+        modifications.put("declined", declined);
 
-        return "package";
+        List<Package> packages = packageRepository.getAllPackages(modifications);
+        model.addAttribute("packages", packages);
+
+        return "packages";
     }
 
-    @GetMapping("/package/{id}")
+    @GetMapping("/packages/{id}")
     public String getPackageInfo (@PathVariable String id, Model model){
 
 
