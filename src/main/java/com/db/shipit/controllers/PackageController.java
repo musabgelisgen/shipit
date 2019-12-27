@@ -57,6 +57,9 @@ public class PackageController {
             @RequestParam(value = "onBranch", required = false, defaultValue = "false") boolean onBranch,
             @RequestParam(value = "delivered", required = false, defaultValue = "false") boolean delivered,
             @RequestParam(value = "declined", required = false, defaultValue = "false") boolean declined,
+            @RequestParam(value = "id", required = false, defaultValue = "0") String id,
+            @RequestParam(value = "accept", required = false, defaultValue = "0") int accept,
+            @RequestParam(value = "decline", required = false, defaultValue = "0") int decline,
             Model model){
 
         Map<String, Boolean> modifications = new HashMap<>();
@@ -68,16 +71,22 @@ public class PackageController {
         modifications.put("delivered", delivered);
         modifications.put("declined", declined);
 
+        if (accept == 1 || decline == 1)
+            packageRepository.updatePackageStatus(id, accept, decline);
+
         List<Package> packages = packageRepository.getAllPackages(modifications);
         model.addAttribute("packages", packages);
 
         return "packages";
     }
 
-    @GetMapping("/packages/{id}")
-    public String getPackageInfo (@PathVariable String id, Model model){
+    @GetMapping("/package")
+    public String getPackageInfo (@RequestParam(value = "id") String id, Model model){
+        Package packet = packageRepository.findPackageById(id);
 
+        if (packet == null)
+            return "redirect:packages";
 
-        return "package";
+        return "packages";
     }
 }
