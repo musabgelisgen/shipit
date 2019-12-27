@@ -1,10 +1,84 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link href="subscription.css" rel="stylesheet"/>
     <title>My Subscriptions</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </head>
 <body>
+
+<div class="w-25 center_div bottom">
+    <p align="center" class="h2 mb-2">Current Subscription</p>
+</div>
+<div th:if="${subscription != null}" class="container container-table">
+
+    <div class="row vertical-center-row">
+        <p class="h4 mb-4 float-left" style="color: white">Subscription Number:     <span th:text="${subscription.getSubscriptionNumber()}"  class="h5 mb-5"style="color: darkgray"></span></p>
+    </div>
+
+    <div class="row vertical-center-row">
+        <p class="h4 mb-4 float-left" style="color: white">Subscription Tier:     <span th:text="${subscription.getSubscriptionTier()}" class="h5 mb-5 "style="color: darkgray"></span> <span class="h5 mb-5 "style="color: darkgray">free shipments per month</span></p>
+    </div>
+
+    <div class="row vertical-center-row">
+        <p class="h4 mb-4 float-left" style="color: white">Used Package Rights:     <span th:text="${subscription.getUsedPackageRights()}" class="h5 mb-5 "style="color: darkgray"></span></p>
+    </div>
+
+    <div class="row vertical-center-row">
+        <p class="h4 mb-4 float-left" style="color: white">Start Date:     <span th:text="${subscription.getStartDate()}" class="h5 mb-5 "style="color: darkgray"></span></p>
+    </div>
+
+    <div class="row vertical-center-row">
+        <p class="h4 mb-4 float-left" style="color: white">End Date:     <span th:text="${subscription.getEndDate()}" class="h5 mb-5 "style="color: darkgray"></span></p>
+    </div>
+
+</div>
+
+<div class="center_div container container-table">
+    <div class="row vertical-center-row">
+        <div class="col-md-4"><button class="btn btn-danger" th:if="${subscription != null}">Cancel Subscription</button></div>
+        <div class="col-md-4 col-md-offset-1"><button class="btn btn-danger" th:if="${subscription != null}">Renew Subscription</button></div>
+        <div class="col-md-4 col-md-offset-1"><button class="btn btn-danger">Book a new Subscription</button></span></div>
+    </div>
+</div>
+
+<hr>
+<hr>
+
+<div class="w-25 center_div bottom">
+    <p align="center" class="h2 mb-2">Subscription History</p>
+</div>
+<div class="w-50 center_div ">
+    <table class="table table-hover table-dark">
+        <thead>
+        <tr>
+            <th scope="col">Subscription Number</th>
+            <th scope="col">Subscription Tier</th>
+            <th scope="col">Used Package Rights</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">End Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="subscription, iStat: ${subscription_history}">
+            <td th:text="${subscription.getSubscriptionNumber()}"></td>
+            <td th:text="${subscription.getSubscriptionTier()}"></td>
+            <td th:text="${subscription.getUsedPackageRights()}"></td>
+            <td th:text="${subscription.getStartDate()}"></td>
+            <td th:text="${subscription.getEndDate()}"></td>
+            <!--
+            <td><a th:href="@{/packages(id=${package.package_id}, accept='1')}" class="btn btn-success">Accept</a></td>
+            <td><a th:href="@{/packages(id=${package.package_id}, decline='1')}" class="btn btn-danger">Decline</a></td>
+            <td><a th:href="@{/report(id=${package.package_id}, report='1')}" class="btn btn-warning">Report</a></td>
+            <td><a th:href="@{/package(id=${package.package_id})}" class="btn btn-info">About</a></td>
+            -->
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 </body>
 </html>

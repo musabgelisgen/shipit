@@ -2,13 +2,15 @@ package com.db.shipit.models;
 
 public class Subscription {
     private String ID;
+    private int subscription_number;
     private int subscription_tier;
     private int used_package_rights;
     private String start_date;
     private String end_date;
 
-    public Subscription(String ID, int subscription_tier, int used_package_rights, String start_date, String end_date){
+    public Subscription(String ID, int subscription_number, int subscription_tier, int used_package_rights, String start_date, String end_date){
         this.ID = ID;
+        this.subscription_number = subscription_number;
         this.subscription_tier = subscription_tier;
         this.used_package_rights = used_package_rights;
         this.start_date = start_date;
@@ -21,6 +23,13 @@ public class Subscription {
 
     public Subscription setID(String ID){
         this.ID = ID;
+        return this;
+    }
+
+    public int getSubscriptionNumber(){ return subscription_number; }
+
+    public Subscription setSubscriptionNumber(int subscription_number){
+        this.subscription_number = subscription_number;
         return this;
     }
 
