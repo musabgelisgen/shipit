@@ -37,16 +37,27 @@
 
 </div>
 
-<div class="center_div container container-table">
-    <div class="row vertical-center-row">
-        <div class="col-md-4"><button class="btn btn-danger" th:if="${subscription != null}">Cancel Subscription</button></div>
-        <div class="col-md-4 col-md-offset-1"><button class="btn btn-danger" th:if="${subscription != null}">Renew Subscription</button></div>
-        <div class="col-md-4 col-md-offset-1"><button class="btn btn-danger">Book a new Subscription</button></span></div>
+<form th:action="@{/my_subscriptions}" method="POST">
+    <div class="center_div container container-table" th:if="${subscription != null}">
+        <div class="row vertical-center-row">
+            <div class="col-md-4"><button type="submit" th:name="button" th:value="cancel" class="btn btn-danger">Cancel Subscription</button></div>
+            <div class="col-md-4 col-md-offset-1"><button type="submit" th:name="button" th:value="renew" class="btn btn-danger">Renew Subscription</button></div>
+            <div class="col-md-4 col-md-offset-1"><button type="submit" th:name="button" th:value="buy" class="btn btn-danger">Book a new Subscription</button></span></div>
+        </div>
     </div>
-</div>
+</form>
 
-<hr>
-<hr>
+<form th:action="@{/my_subscriptions}" method="POST">
+    <div class="w-50 center_div container container-table" th:if="${subscription == null}">
+        <br>
+        <br>
+        <p class="h5 mv-5" align="center" style="color: red">YOU DON'T HAVE ANY CURRENT SUBSCRIPTIONS!</p>
+        <div align="center"><button type="submit" th:name="button" th:value="buy" class="btn btn-danger">Book a new Subscription</button></span></div>
+    </div>
+</form>
+
+<br>
+<br>
 
 <div class="w-25 center_div bottom">
     <p align="center" class="h2 mb-2">Subscription History</p>

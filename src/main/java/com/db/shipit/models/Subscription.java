@@ -7,14 +7,16 @@ public class Subscription {
     private int used_package_rights;
     private String start_date;
     private String end_date;
+    private boolean is_active;
 
-    public Subscription(String ID, int subscription_number, int subscription_tier, int used_package_rights, String start_date, String end_date){
+    public Subscription(String ID, int subscription_number, int subscription_tier, int used_package_rights, String start_date, String end_date, boolean is_active){
         this.ID = ID;
         this.subscription_number = subscription_number;
         this.subscription_tier = subscription_tier;
         this.used_package_rights = used_package_rights;
         this.start_date = start_date;
         this.end_date = end_date;
+        this.is_active = is_active;
     }
 
     public Subscription(){};
@@ -23,6 +25,15 @@ public class Subscription {
 
     public Subscription setID(String ID){
         this.ID = ID;
+        return this;
+    }
+
+    public boolean isIs_active() {
+        return is_active;
+    }
+
+    public Subscription setIs_active(boolean is_active) {
+        this.is_active = is_active;
         return this;
     }
 
