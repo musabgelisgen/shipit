@@ -134,6 +134,7 @@ public class DataSourceGenerator {
                 "used_package_rights INTEGER NOT NULL DEFAULT 0," +
                 "start_date DATE NOT NULL," +
                 "end_date DATE NOT NULL," +
+                "is_active BOOLEAN NOT NULL," +
                 "PRIMARY KEY(ID, subscription_number)," +
                 "FOREIGN KEY(ID) REFERENCES Customer(ID)," +
                 "CHECK(subscription_tier >= 0)," +
