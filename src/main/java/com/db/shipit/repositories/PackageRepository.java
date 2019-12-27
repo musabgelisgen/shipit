@@ -97,4 +97,29 @@ public class PackageRepository {
                 .setCurr_city(from)
                 .setTo_city(to_city);
     }
+
+    public void updatePackageStatus(String id, int accept, int decline) {
+        String status = jdbcTemplate.queryForObject("SELECT status FROM Package WHERE package_id = ?", new Object[]{id}, String.class);
+        if (status == null)
+            return;
+
+        if (status.equalsIgnoreCase("declined") || status.equalsIgnoreCase("delivered"))
+            return;
+
+        String date = DatePicker.getDate();
+
+        if (accept == 1){
+            jdbcTemplate.update("UPDATE Package SET status = 'delivered' where package_id = ?;", id);
+            jdbcTemplate.update("UPDATE Package SET delivery_date = ? where package_id = ?;", date, id);
+        }
+        else if (decline == 1){
+            jdbcTemplate.update("UPDATE Package SET status = 'declined' where package_id = ?;", id);
+            jdbcTemplate.update("UPDATE Package SET delivery_date = ? where package_id = ?;", date, id);
+        }
+    }
+
+    public Package findPackageById(String id) {
+        List<Package> query = jdbcTemplate.query("SELECT * FROM Package WHERE package_id = ?", new Object[]{id}, new BeanPropertyRowMapper(Package.class));
+        return query.size() > 0 ? query.get(0) : null;
+    }
 }

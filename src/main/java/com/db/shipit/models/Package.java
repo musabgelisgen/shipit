@@ -94,7 +94,7 @@ public class Package {
     }
 
     public Package setStatus(String status) {
-        this.status = status.toLowerCase();
+        this.status = status;
         return this;
     }
 
@@ -103,7 +103,7 @@ public class Package {
     }
 
     public Package setPackage_type(String package_type) {
-        this.package_type = package_type;
+        this.package_type = package_type.toLowerCase();
         return this;
     }
 
