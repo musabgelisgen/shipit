@@ -2,6 +2,7 @@ package com.db.shipit.controllers;
 
 import com.db.shipit.models.Package;
 import com.db.shipit.models.Subscription;
+import com.db.shipit.models.User;
 import com.db.shipit.repositories.CustomerRepository;
 import com.db.shipit.repositories.SubscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,17 +63,26 @@ public class SubscriptionController {
 
     @GetMapping("/my_subscriptions")
     public String showSubscriptions (Model model) throws ParseException {
-        List<Subscription> subscriptions = subscriptionRepository.getSubscriptionByID(currentUser.getID());
-        Subscription latestSubscription = subscriptions.get(0);
-        Subscription currSubscription = null;
+        if(currentUser == null) {
+            model.addAttribute("user", new User());
+            return "login";
+        }
+        else if(customerRepository.searchCustomerFromId(currentUser.getID()) != null) {
+            List<Subscription> subscriptions = subscriptionRepository.getSubscriptionByID(currentUser.getID());
+            Subscription latestSubscription = subscriptions.get(0);
+            Subscription currSubscription = null;
 
-        if(latestSubscription.isIs_active())
-            currSubscription = latestSubscription;
+            if (latestSubscription.isIs_active())
+                currSubscription = latestSubscription;
 
-        model.addAttribute("subscription", currSubscription);
+            model.addAttribute("subscription", currSubscription);
 
-        model.addAttribute("subscription_history", subscriptions);
+            model.addAttribute("subscription_history", subscriptions);
 
-        return "my_subscriptions";
+            return "my_subscriptions";
+        }
+        else
+            return "redirect:/my_account";
+
     }
 }
