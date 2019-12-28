@@ -4,9 +4,26 @@
     <meta charset="UTF-8">
     <link href="subscription.css" rel="stylesheet"/>
     <title>My Subscriptions</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script>
+        $(function() {
+            $('[data-toggle="popover"]').popover({
+                title: "Buy Subscription",
+                html: true,
+                sanitize: false,
+                content: function() {
+                    return $('#popover-content').html();
+                }
+                });
+        });
+        $( "#popover-content" ).bind( "submit", function() {
+            alert("succeed");
+            return false;
+        })
+    </script>
 </head>
 <body>
 
@@ -38,23 +55,36 @@
 </div>
 
 <form th:action="@{/my_subscriptions}" method="POST">
-    <div class="center_div container container-table" th:if="${subscription != null}">
+    <div align="center" class="center_div container container-table" th:if="${subscription != null}">
         <div class="row vertical-center-row">
-            <div class="col-md-4"><button type="submit" th:name="button" th:value="cancel" class="btn btn-danger">Cancel Subscription</button></div>
-            <div class="col-md-4 col-md-offset-1"><button type="submit" th:name="button" th:value="renew" class="btn btn-danger">Renew Subscription</button></div>
-            <div class="col-md-4 col-md-offset-1"><button type="submit" th:name="button" th:value="buy" class="btn btn-danger">Book a new Subscription</button></span></div>
+            <div class="col-md-3"></div>
+            <div class="col-md-3"><button type="submit" th:name="button" th:value="cancel" class="btn btn-danger">Cancel Subscription</button></div>
+            <div class="col-md-3"><button type="submit" th:name="button" th:value="renew" class="btn btn-danger">Renew Subscription</button></div>
         </div>
     </div>
 </form>
 
-<form th:action="@{/my_subscriptions}" method="POST">
-    <div class="w-50 center_div container container-table" th:if="${subscription == null}">
-        <br>
-        <br>
-        <p class="h5 mv-5" align="center" style="color: red">YOU DON'T HAVE ANY CURRENT SUBSCRIPTIONS!</p>
-        <div align="center"><button type="submit" th:name="button" th:value="buy" class="btn btn-danger">Book a new Subscription</button></span></div>
-    </div>
-</form>
+
+<div class="w-50 center_div container container-table" th:if="${subscription == null}">
+    <br>
+    <br>
+    <p class="h5 mv-5" align="center" style="color: red">YOU DON'T HAVE ANY CURRENT SUBSCRIPTIONS!</p>
+    <div align="center"><button class="btn btn-danger" data-toggle="popover">Book a new Subscription</button></span></div>
+</div>
+
+<!-- loaded popover content -->
+<div id="popover-content" style="display: none">
+    <form  th:action="@{/my_subscriptions}" method="POST">
+        <p class="h4 mb-4">Select Tier</p>
+        <select th:name="sub_tier" class="custom-select controls">
+            <option th:value=5 selected>5 (50 credits)</option>
+            <option th:value=10>10 (80 credits)</option>
+            <option th:value=15>15 (100 credits)</option>
+        </select>
+        <button type="submit" class="btn btn-danger mt-3">Buy</button>
+    </form>
+</div>
+
 
 <br>
 <br>
@@ -80,16 +110,12 @@
             <td th:text="${subscription.getUsedPackageRights()}"></td>
             <td th:text="${subscription.getStartDate()}"></td>
             <td th:text="${subscription.getEndDate()}"></td>
-            <!--
-            <td><a th:href="@{/packages(id=${package.package_id}, accept='1')}" class="btn btn-success">Accept</a></td>
-            <td><a th:href="@{/packages(id=${package.package_id}, decline='1')}" class="btn btn-danger">Decline</a></td>
-            <td><a th:href="@{/report(id=${package.package_id}, report='1')}" class="btn btn-warning">Report</a></td>
-            <td><a th:href="@{/package(id=${package.package_id})}" class="btn btn-info">About</a></td>
-            -->
         </tr>
         </tbody>
     </table>
 </div>
 
+
 </body>
 </html>
+
