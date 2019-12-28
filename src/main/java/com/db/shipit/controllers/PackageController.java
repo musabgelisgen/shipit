@@ -7,6 +7,7 @@ import com.db.shipit.models.User;
 import com.db.shipit.repositories.BranchRepository;
 import com.db.shipit.repositories.CustomerRepository;
 import com.db.shipit.repositories.PackageRepository;
+import com.db.shipit.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static com.db.shipit.ShipitApplication.currentUser;
 
 @Controller
 public class PackageController {
@@ -28,6 +31,9 @@ public class PackageController {
 
     @Autowired
     PackageRepository packageRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     @GetMapping("/send_package")
     public String sendPackage (Model model){
@@ -87,7 +93,28 @@ public class PackageController {
         if (packet == null)
             return "redirect:packages";
 
-        return "packages";
+        model.addAttribute("package", packet);
+
+        String receiver = userRepository.searchUserFromId(packet.getReceiver_id()).getFullName();
+        String sender = userRepository.searchUserFromId(packet.getSender_id()).getFullName();
+
+        if (currentUser.getID().equals(packet.getReceiver_id())){
+            receiver = "(You) " + receiver;
+        }
+        else if (currentUser.getID().equals(packet.getSender_id())){
+            sender = "(You) " + sender;
+        }
+
+        model.addAttribute("sender", sender);
+        model.addAttribute("receiver", receiver);
+
+        String cost = "" + packet.getCost();
+        if (packet.getCost() == -1){
+            cost = "(-1 quota)";
+        }
+        model.addAttribute("cost", cost);
+
+        return "package";
     }
 
     @GetMapping("/top_senders")

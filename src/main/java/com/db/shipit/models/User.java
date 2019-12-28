@@ -62,6 +62,10 @@ public class User {
         return this;
     }
 
+    public String getFullName(){
+        return getFirstName() + " " + getLastName();
+    }
+
     @Override
     public String toString() {
         return "User{" +
