@@ -1,8 +1,11 @@
 package com.db.shipit.controllers;
 
 import com.db.shipit.models.Customer;
+import com.db.shipit.models.CustomerService;
 import com.db.shipit.models.Subscription;
+import com.db.shipit.models.User;
 import com.db.shipit.repositories.CustomerRepository;
+import com.db.shipit.repositories.CustomerServiceRepository;
 import com.db.shipit.repositories.SubscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,8 +29,16 @@ public class AccountController {
     @Autowired
     SubscriptionRepository subscriptionRepository;
 
+    @Autowired
+    CustomerServiceRepository customerServiceRepository;
+
     @PostMapping("/my_account")
-    public String buttonClicked(Model model, @RequestParam(value = "credits", required = false, defaultValue = "-1") String credits) throws ParseException {
+    public String buttonClicked(Model model, @RequestParam(value = "credits", required = false, defaultValue = "-1") String credits, @RequestParam(value = "logout", required = false, defaultValue = "False") String logout) throws ParseException {
+        if(logout.equals("true")){
+            currentUser = null;
+            model.addAttribute("user", new User());
+            return "login";
+        }
         int creditValue = Integer.parseInt(credits);
         if(creditValue != -1)
             customerRepository.changeCustomerBalance(creditValue);
@@ -37,16 +48,28 @@ public class AccountController {
 
     @GetMapping("/my_account")
     public String showInformation (Model model){
-        Customer customer = customerRepository.searchCustomerFromId(currentUser.getID());
-        List<Subscription> subscriptions = subscriptionRepository.getSubscriptionByID(customer.getID());
-        Subscription sub = subscriptions.get(0);
-        String custSubscription = "-";
-        if(sub.isIs_active())
-            custSubscription = sub.getID();
+        if(currentUser == null) {
+            model.addAttribute("user", new User());
+            return "login";
+        }
+        else if(customerRepository.searchCustomerFromId(currentUser.getID()) != null) {
+            Customer customer = customerRepository.searchCustomerFromId(currentUser.getID());
+            List<Subscription> subscriptions = subscriptionRepository.getSubscriptionByID(customer.getID());
+            Subscription sub = subscriptions.get(0);
+            String custSubscription = "-";
+            if (sub.isIs_active())
+                custSubscription = sub.getID();
 
-        model.addAttribute("customer", customer);
-        model.addAttribute("custSubscription", custSubscription);
+            model.addAttribute("customer", customer);
+            model.addAttribute("custSubscription", custSubscription);
 
-        return "my_account";
+            return "my_account";
+        }
+        else{
+            CustomerService customerService = customerServiceRepository.searchCustomerServiceById(currentUser.getID());
+            model.addAttribute("customerService", customerService);
+
+            return "customer_service_account";
+        }
     }
 }

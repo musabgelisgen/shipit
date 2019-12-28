@@ -2,6 +2,7 @@ package com.db.shipit.controllers;
 
 import com.db.shipit.models.Customer;
 import com.db.shipit.models.User;
+import com.db.shipit.repositories.CustomerRepository;
 import com.db.shipit.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,8 +19,11 @@ public class LoginController {
     @Autowired
     UserRepository userRepository;
 
+
     @GetMapping("")
     public String login (Model model){
+        if(currentUser != null)
+            return "redirect:/my_account";
 
         model.addAttribute("user", new User());
         return "login";
@@ -32,6 +36,7 @@ public class LoginController {
         if (user1 != null){
             System.out.println(user1);
             currentUser = user1;
+            return "redirect:/my_account";
         }
 
         return "login";

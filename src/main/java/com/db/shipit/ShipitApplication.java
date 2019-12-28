@@ -9,7 +9,8 @@ public class ShipitApplication {
     public static User currentUser;
 
     public static void main(String[] args) {
-        currentUser = new User().setID("51572f");
+        //currentUser = new User().setID("99c02f");
+        currentUser = null;
         SpringApplication.run(ShipitApplication.class, args);
     }
 

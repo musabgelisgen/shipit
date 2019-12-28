@@ -25,4 +25,9 @@ public class CustomerServiceRepository {
         jdbcTemplate.update("insert into CustomerService values (?,?,?)", id, customerService.getBranchName(), customerService.getSalary());
     }
 
+    public CustomerService searchCustomerServiceById(String id){
+        List<CustomerService> c = jdbcTemplate.query("SELECT * FROM CustomerService WHERE ID = ?", new Object[]{id}, new BeanPropertyRowMapper(CustomerService.class));
+        return c.size() > 0 ? c.get(0) : null;
+    }
+
 }

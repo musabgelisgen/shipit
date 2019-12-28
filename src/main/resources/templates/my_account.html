@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>My Account</title>
-    <link href="package.css" rel="stylesheet"/>
+    <link href="account.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -70,9 +70,13 @@
         </form>
     </div>
 
-
-
 </div>
+
+<form th:action="@{/my_account}" method="POST">
+    <div class="w-25 center_div mt-10">
+        <button align="center" class="btn btn-danger" type="submit" th:name="logout" th:value="True">Log out</button>
+    </div>
+</form>
 
 </body>
 </html>
