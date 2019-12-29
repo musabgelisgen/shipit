@@ -45,7 +45,7 @@
             <td th:text="${package.status}"><a th:href="@{/package(id=${package.package_id})}"></td>
             <td><a th:href="@{/packages(id=${package.package_id}, accept='1')}" class="btn btn-success">Accept</a></td>
             <td><a th:href="@{/packages(id=${package.package_id}, decline='1')}" class="btn btn-danger">Decline</a></td>
-            <td><a th:href="@{/report(id=${package.package_id}, report='1')}" class="btn btn-warning">Report</a></td>
+            <td><a th:href="@{/file_report(package_id=${package.package_id}, issuer_id=${package.receiver_id}, report='1')}" class="btn btn-warning">Report</a></td>
             <td><a th:href="@{/package(id=${package.package_id})}" class="btn btn-info">About</a></td>
         </tr>
         </tbody>

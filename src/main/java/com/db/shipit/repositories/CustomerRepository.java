@@ -9,6 +9,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 
+import static com.db.shipit.ShipitApplication.currentUser;
+
 @Repository
 public class CustomerRepository {
 
@@ -31,5 +33,15 @@ public class CustomerRepository {
     public List<Customer> getAllCustomers() {
         List<Customer> customers = jdbcTemplate.query("SELECT * FROM Customer NATURAL JOIN User", new BeanPropertyRowMapper(Customer.class));
         return customers;
+    }
+
+    public void changeCustomerBalance(int amount){
+        jdbcTemplate.update("UPDATE Customer SET credits = credits + ? WHERE ID = ?", amount, currentUser.getID());
+    }
+
+    public int getCustomerBalance(){
+        Customer customer = searchCustomerFromId(currentUser.getID());
+        int balance = customer.getCredits();
+        return balance;
     }
 }

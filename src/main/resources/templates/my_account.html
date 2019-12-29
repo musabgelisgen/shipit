@@ -3,16 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>My Account</title>
-    <link href="package.css" rel="stylesheet"/>
+    <link href="account.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <script>
+        $(function() {
+            $('[data-toggle="popover"]').popover({
+                title: "Buy Subscription",
+                html: true,
+                sanitize: false,
+                content: function() {
+                    return $('#popover-content').html();
+                }
+            });
+        });
+        $( "#popover-content" ).bind( "submit", function() {
+            alert("succeed");
+            return false;
+        })
+    </script>
 
 </head>
 <body>
 
 <!-- Default form subscription -->
-<div class="w-25 center_div text-center border border-light p-5 center_div container container-table">
+<div class="w-25 vertical-center center_div text-center border border-light p-5 center_div container container-table">
 
 
     <div class="row vertical-center-row">
@@ -36,16 +54,29 @@
     </div>
 
     <div class="row vertical-center-row">
-        <span><p class="h4 mb-4 float-left" style="color: white">Your Credits:     <span th:text="${customer.getCredits()}" class="h5 mb-5 " style="color: darkgray"></span></p> <button class="btn btn-danger">Load Credit</button></span>
+        <span><p class="h4 mb-4 float-left" style="color: white">Your Credits:     <span th:text="${customer.getCredits()}" class="h5 mb-5 " style="color: darkgray"></span></p> <button class="btn btn-danger ml-4" data-toggle="popover">Load Credit</button></span>
     </div>
 
     <div class="row vertical-center-row">
-        <p class="h4 mb-4 float-left" style="color: white">Your Subscription:     -</p>
+        <p class="h4 mb-4 float-left" style="color: white">Your Subscription:     <span th:text="${custSubscription}" class="h5 mb-5 " style="color: darkgray"></span></p>
     </div>
 
-
+    <!-- loaded popover content -->
+    <div id="popover-content" style="display: none">
+        <form  th:action="@{/my_account}" method="POST">
+            <p class="h4 mb-4">Type Amount</p>
+            <input type="number" step="1" min="0" id="credits" name="credits" required/>
+            <button type="submit" class="btn btn-danger mt-4">Charge</button>
+        </form>
+    </div>
 
 </div>
+
+<form th:action="@{/my_account}" method="POST">
+    <div class="w-25 center_div mt-10">
+        <button align="center" class="btn btn-danger" type="submit" th:name="logout" th:value="True">Log out</button>
+    </div>
+</form>
 
 </body>
 </html>
