@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>File a Report</title>
+    <link href="file_report.css" rel="stylesheet"/>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<div class="w-25 center_div">
+    <form class="text-center border border-light p-5 center_div" ACTION='#' th:action="@{/save_report}" th:object="${report}" method="POST">
+        <legend class="">File A Report</legend>
+
+        Reported Package ID: <input th:field="*{package_id}" th:value="${report.package_id}" readonly><br>
+        <div class="input-group mb-3 control-group">
+            Report Type:
+            <select class="custom-select controls" th:field="*{report_type}" id="report_type">
+                <option th:value="0" selected>Choose a report type...</option>
+                <option th:value="broken" selected>broken</option>
+                <option th:value="damaged" selected>damaged</option>
+                <option th:value="other" selected>other</option>
+            </select>
+        </div>
+
+        Description:
+        <textarea id="description" th:field="*{description}"> </textarea>
+        <textarea id="issuer_id" th:value="${report.issuer_id}" th:field="*{issuer_id}" style="visibility: hidden"> </textarea>
+
+        <input type="submit" value="File Report">
+    </form>
+
+
+
+</div>
+</body>
+</html>
