@@ -1,12 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>My reports</title>
-    <link href="file_report.css" rel="stylesheet"/>
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <title>Report</title>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -42,36 +38,6 @@
         </form>
     </div>
 </nav>
-<div class="w-75 center_div ">
-    <table class="table table-hover table-dark">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">ReportID</th>
-            <th scope="col">Related Package</th>
-            <th scope="col">Report Type</th>
-            <th scope="col">Result</th>
-            <th scope="col">Status</th>
-            <th scope="col">Date</th>
-            <th scope="col">Action</th>
-
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="report, iStat : ${reports}">
-            <th scope="row" th:text="${iStat.index + 1}" th:value="${iStat.index + 1}"></th>
-            <td th:text="${report.report_id}"></td>
-            <td th:text="${report.package_id}"></td>
-            <td th:text="${report.report_type}"></td>
-            <td th:text="${report.result}"></td>
-            <td th:text="${report.report_status}"></td>
-            <td th:text="${report.issue_date}"></td>
-            <td><a th:href="@{/report(id=${report.report_id})}" class="btn btn-info">Logs</a></td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-
 
 </body>
 </html>

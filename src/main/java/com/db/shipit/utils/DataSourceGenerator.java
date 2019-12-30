@@ -147,6 +147,7 @@ public class DataSourceGenerator {
                 "package_id CHAR(6) NOT NULL," +
                 "description VARCHAR(1000) NOT NULL," +
                 "report_type VARCHAR(7) NOT NULL," +
+                "report_status VARCHAR(8) NOT NULL," +
                 "issue_date DATETIME NOT NULL," +
                 "result VARCHAR(8)," +
                 "PRIMARY KEY(report_id)," +
@@ -154,6 +155,7 @@ public class DataSourceGenerator {
                 "FOREIGN KEY(issuer_id) REFERENCES Customer(ID)," +
                 "FOREIGN KEY(package_id) REFERENCES Package(package_id)," +
                 "CHECK(report_type IN ('damaged','missing','wrong'))," +
+                "CHECK(report_status IN ('waiting','taken','finished'))," +
                 "CHECK(result IN (null,'positive','negative')));");
 
         statement.executeUpdate("CREATE TABLE Message(" +

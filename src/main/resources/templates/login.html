@@ -9,6 +9,7 @@
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </head>
 <body>
+
 <div class="wrapper fadeInDown">
     <div id="formContent">
         <!-- Tabs Titles -->
@@ -20,8 +21,8 @@
 
         <!-- Login Form -->
         <form ACTION='#' th:action="@{/}" th:object="${user}" method="POST">
-            <input th:field="*{email}" type="text" id="login" class="fadeIn second" name="login" placeholder="email">
-            <input th:field="*{encryptedPassword}" type="text" id="password" class="fadeIn third" name="login" placeholder="password">
+            <input th:field="*{email}" type="text" id="login" class="fadeIn second" name="login" placeholder="email" minlength="5" maxlength="30">
+            <input th:field="*{encryptedPassword}" type="password" id="password" class="fadeIn third" name="login" placeholder="password" minlength="4" maxlength="12">
             <input type="submit" class="fadeIn fourth" value="Log In">
         </form>
 
