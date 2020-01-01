@@ -38,6 +38,8 @@ public class LoginController {
             currentUser = user1;
             return "redirect:/my_account";
         }
+        else
+            System.out.println("User Not Found");
 
         return "login";
     }

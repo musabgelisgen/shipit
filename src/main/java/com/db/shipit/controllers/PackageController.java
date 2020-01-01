@@ -76,8 +76,6 @@ public class PackageController {
 
     @GetMapping("/packages/{id}")
     public String getPackageInfo (@PathVariable String id, Model model){
-
-
         return "package";
     }
 }

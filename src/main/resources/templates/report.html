@@ -1,9 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Report</title>
+    <link href="report.css" rel="stylesheet"/>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </head>
+
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="#">Shipit</a>
@@ -32,12 +37,85 @@
                 </form>
             </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0" action="/package" method="GET">
+        <form class="form-inline my-2 my-lg-0" action="/packages" method="GET">
             <input name="id" class="form-control mr-sm-2" type="search" placeholder="Search a Package" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
     </div>
 </nav>
+
+<!-- Default form subscription -->
+<div class="w-25 vertical-center center_div text-center border border-light p-5 center_div container container-table">
+
+
+    <div class="row vertical-center-row">
+        <p class="h7 mb-7 float-left" style="color: white">Report ID:     <span th:text="${report.getReport_id()}"  class="h5 mb-5"style="color: darkgray"></span></p>
+    </div>
+
+    <div class="row vertical-center-row">
+        <p class="h7 mb-7 float-left" style="color: white">Courier:     <span th:text="${ courier}"  class="h5 mb-5"style="color: darkgray"></span></p>
+    </div>
+
+    <div class="row vertical-center-row">
+        <p class="h7 mb-7 float-left" style="color: white">Related Package ID:     <span th:text="${report.getPackage_id()}" class="h5 mb-5 " style="color: darkgray"></span></p>
+    </div>
+
+    <div class="row vertical-center-row">
+        <p class="h7 mb-7 float-left" style="color: white">Issue Date:     <span th:text="${report.getIssue_date()}" class="h5 mb-5 "style="color: darkgray"></span></p>
+    </div>
+
+    <div class="row vertical-center-row">
+        <p class="h7 mb-7 float-left" style="color: white">Report Type:     <span th:text="${report.getReport_type()}" class="h5 mb-5 "style="color: darkgray"></span></p>
+    </div>
+
+    <div class="row vertical-center-row">
+        <p class="h7 mb-7 float-left" style="color: white">Result:     <span th:text="${report.getResult()}" class="h5 mb-5 "style="color: darkgray"></span></p>
+    </div>
+
+    <div class="row vertical-center-row">
+        <p class="h7 mb-7 float-left" style="color: white">Status:     <span th:text="${report.getReport_status()}" class="h5 mb-5 "style="color: darkgray"></span></p>
+    </div>
+
+    <div class="row vertical-center-row">
+       <p class="h7 mb-7 float-left" style="color: white">Description:     <span th:text="${report.getDescription()}" class="h5 mb-5 " style="color: darkgray"></span></p>
+    </div>
+
+    <div class="row vertical-center-row">
+        <p class="h7 mb-7 float-left" style="color: white">Handler ID:     <span th:text="${report.getHandler_id()}" class="h5 mb-5 " style="color: darkgray"></span></p>
+    </div>
+
+</div>
+
+
+<div id="dialogue-page" class="hidden">
+    <div class="dialogue-container">
+        <div class="dialogue-header">
+            <h3>Message Board of The Report</h3>
+        </div>
+        <ul id="messageList">
+            <table class="table ">
+                <thead>
+                <tr>
+                    <th scope="col">OtherSide</th>
+                    <th scope="col">You</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="messagee, iStat : ${messages}">
+                    <td th:text="${messagee}"></td>
+                    <td th:text="${messagee}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </ul>
+        <div>
+            <form id="dialogueForm" name="dialogueForm" >
+                            <label for="newMessage"></label><input th:field="*{newMessage}" minlength="1" maxlength="30" class="form-control mb-4" type="text" id="newMessage" name="newMessage" placeholder="Enter a Message...">
+                            <td><a th:href="@{/chat.sendMessage(id=${report.report_id},package_id=${report.package_id},newMessage=*{newMessage})}" class="btn btn-success">Send</a></td>
+            </form>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

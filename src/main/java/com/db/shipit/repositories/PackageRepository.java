@@ -32,6 +32,12 @@ public class PackageRepository {
         return packages;
     }
 
+    public String getAPackageCourier(String package_id) {
+        String id = currentUser.getID();
+
+        List<Package> packages = jdbcTemplate.query("SELECT * FROM Package WHERE package_id = ? ", new Object[]{package_id },new BeanPropertyRowMapper(Package.class));
+        return packages.get(0).getCourier();
+    }
     public void commitPackage(Package packet) {
         setPropertiesOfToInsert(packet);
 
