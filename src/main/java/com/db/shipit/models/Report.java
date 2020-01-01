@@ -9,9 +9,11 @@ public class Report {
     String report_type;
     String issue_date;
     String result;
+    String report_status;
 
-    public Report( String report_id, String handler_id, String issuer_id, String package_id, String description,
-                   String report_type, String issue_date, String result ){
+    public Report(){}
+
+    public Report(String report_id, String handler_id, String issuer_id, String package_id, String description, String report_type, String issue_date, String result, String report_status) {
         this.report_id = report_id;
         this.handler_id = handler_id;
         this.issuer_id = issuer_id;
@@ -20,8 +22,17 @@ public class Report {
         this.report_type = report_type;
         this.issue_date = issue_date;
         this.result = result;
+        this.report_status = report_status;
     }
 
+    public String getReport_status() {
+        return report_status;
+    }
+
+    public Report setReport_status(String report_status) {
+        this.report_status = report_status;
+        return this;
+    }
 
     public String getReport_id() {
         return report_id;

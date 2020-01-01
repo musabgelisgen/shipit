@@ -10,29 +10,62 @@
 
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Shipit</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/packages">Packages</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/reports">Reports</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/my_subscriptions">Subscriptions</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/my_account">Profile</a>
+            </li>
+
+            <li class="nav-item">
+                <form action="/my_account?logout=true" method="POST">
+                    <a class="nav-link" onclick="this.parentNode.submit()">Logout</a>
+                </form>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0" action="/package" method="GET">
+            <input name="id" class="form-control mr-sm-2" type="search" placeholder="Search a Package" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+
 <div class="w-25 center_div">
     <form class="text-center border border-light p-5 center_div" ACTION='#' th:action="@{/save_report}" th:object="${report}" method="POST">
         <legend class="">File A Report</legend>
 
         Reported Package ID: <input th:field="*{package_id}" th:value="${report.package_id}" readonly><br>
-        <div class="input-group mb-3 control-group">
-            Report Type:
+        <div class="input-group mb-3 mt-3 control-group">
             <select class="custom-select controls" th:field="*{report_type}" id="report_type">
                 <option th:value="0" selected>Choose a report type...</option>
-                <option th:value="broken" selected>broken</option>
                 <option th:value="damaged" selected>damaged</option>
-                <option th:value="other" selected>other</option>
+                <option th:value="missing" selected>missing</option>
+                <option th:value="wrong" selected>wrong</option>
             </select>
         </div>
 
-        Description:
-        <textarea id="description" th:field="*{description}"> </textarea>
+        <textarea id="description" class="form-control block" th:field="*{description}" placeholder="Description"> </textarea>
+
+        <div class="center_div">
+            <input type="submit" class="btn btn-primary" value="File Report">
+        </div>
+
         <textarea id="issuer_id" th:value="${report.issuer_id}" th:field="*{issuer_id}" style="visibility: hidden"> </textarea>
-
-        <input type="submit" value="File Report">
     </form>
-
-
 
 </div>
 </body>
