@@ -96,24 +96,43 @@
             <table class="table ">
                 <thead>
                 <tr>
-                    <th scope="col">OtherSide</th>
+                    <th scope="col">Other Side</th>
+                    <th scope="col">Send Date</th>
                     <th scope="col">You</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="messagee, iStat : ${messages}">
-                    <td th:text="${messagee}"></td>
-                    <td th:text="${messagee}"></td>
+                <script>
+                    function f(mess) {
+                        print();
+                        if (mess.mine==="false"){
+                            document.getElementById("first").innerHTML = mess.textt;
+                            document.getElementById("second").innerHTML = "-";
+                        }
+                        else{
+                            document.getElementById("first").innerHTML = "-";
+                            document.getElementById("second").innerHTML = mess.textt;
+                        }
+                    }
+                </script>
+                <tr th:block th:each="messagee, iStat : ${messages}">
+                    <td ><p id="first">Hi</p></td>
+                    <td th:text="${messagee.date}"></td>
+                    <td ><p id="second">H2i</p></td>
+                        <body
+                                onload='f( ${messagee} );  '>
+                        </body>
                 </tr>
                 </tbody>
             </table>
         </ul>
-        <div>
-            <form id="dialogueForm" name="dialogueForm" >
-                            <label for="newMessage"></label><input th:field="*{newMessage}" minlength="1" maxlength="30" class="form-control mb-4" type="text" id="newMessage" name="newMessage" placeholder="Enter a Message...">
-                            <td><a th:href="@{/chat.sendMessage(id=${report.report_id},package_id=${report.package_id},newMessage=*{newMessage})}" class="btn btn-success">Send</a></td>
+            <form id="dialogueForm" name="dialogueForm" ACTION='#' th:action="@{/chat.sendMessage}"  th:object="${newMessage}" method="GET" >
+                <label for="newMessagee"> </label><input type="text" th:field="*{text}" minlength="1" maxlength="30" class="form-control mb-4" id="newMessagee" name="newMessagee" placeholder="Enter a Message...">
+                <input type="hidden" id="package_id" name="package_id"  th:value ="${report.getPackage_id()}"/>
+                <input type="hidden" id="id" name="id"  th:value="${report.getReport_id()}"/>
+                <button type="submit" class="btn btn-success">Send</button>
             </form>
-        </div>
+
     </div>
 </div>
 

@@ -58,20 +58,23 @@ public class ReportRepository {
                  message.getReport_id(),
                 message.getMessage_number(),
                 message.getText(),
-                message.getSend_date(),
-                message.getSender_id()
+                message.getDate(),
+                message.getSender()
         );
     }
 
-    public List<String> getAllMessages(String report_id) {
+    public List<Message> getAllMessages(String report_id,List<Message> othersidemessage) {
         List<String> messageTexts =new ArrayList<>()  ;
+        List<Message> messages=new ArrayList<Message>() ;
 
         if(!report_id.equals(NULL)){
-            List<Message> messages = jdbcTemplate.query("SELECT * FROM Message WHERE report_id = ?", new Object[]{report_id},new BeanPropertyRowMapper(Message.class));
-            for (Message message : messages) messageTexts.add(message.getText());
+            messages = jdbcTemplate.query("SELECT * FROM Message WHERE report_id = ? and sender=?", new Object[]{report_id,currentUser.getID()},new BeanPropertyRowMapper(Message.class));
+           // for (Message message : messages) messageTexts.add(message.getText());
+            othersidemessage = jdbcTemplate.query("SELECT * FROM Message WHERE report_id = ? and not sender=?", new Object[]{report_id,currentUser.getID()},new BeanPropertyRowMapper(Message.class));
+          //  for (Message message : othermessagese) othersidemessage.add(message.getText());
         }
 
-        return messageTexts;
+        return messages;
     }
     private void setPropertiesOfToInsert(Message message,String report_id1){
         //String report_id= report_id1;
@@ -88,8 +91,8 @@ public class ReportRepository {
         }
         message.setMessage_number(String.valueOf(max+1));
         message.setReport_id(report_id1);
-        message.setSender_id(currentUser.getID());
-        message.setSend_date(DatePicker.getDate());
+        message.setSender(currentUser.getID());
+        message.setDate(DatePicker.getDate());
         message.setText(message.getText());
     }
 

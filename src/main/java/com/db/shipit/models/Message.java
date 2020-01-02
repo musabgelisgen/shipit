@@ -4,16 +4,33 @@ public class Message {
     private String report_id;
     private String message_number;
     private String  text;
-    private String send_date;
-    private String sender_id;
+    private String date;
+    private String sender;
 
     public Message(){}
-    public Message(String report_id, String message_number, String text, String send_date, String sender_id) {
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getSender() {
+        return sender;
+    }
+
+    public void setSender(String sender) {
+        this.sender = sender;
+    }
+
+    public Message(String report_id, String message_number, String text, String date, String sender) {
         this.report_id = report_id;
         this.message_number = message_number;
         this.text = text;
-        this.send_date = send_date;
-        this.sender_id = sender_id;
+        this.date = date;
+        this.sender = sender;
     }
 
     public String getReport_id() {
@@ -41,30 +58,15 @@ public class Message {
         this.text = text;
     }
 
-    public String getSend_date() {
-        return send_date;
-    }
-
-    public void setSend_date(String send_date) {
-        this.send_date = send_date;
-    }
-
-    public String getSender_id() {
-        return sender_id;
-    }
-
-    public void setSender_id(String sender_id) {
-        this.sender_id = sender_id;
-    }
 
     @Override
     public String toString() {
         return "Package{" +
                 "report_id='" + report_id + '\'' +
                 ", message_number='" + message_number + '\'' +
-                ", sender_id='" + sender_id + '\'' +
+                ", sender='" + sender + '\'' +
                 ",text=" + text +
-                ", send_date=" + send_date +
+                ", date=" + date +
                 '}';
     }
 }
