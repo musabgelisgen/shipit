@@ -51,6 +51,7 @@ public class ReportRepository {
 
         return r.size() > 0 ? r.get(0) : null;
     }
+
         public void commitMessage(Message message,String report_id) {
         setPropertiesOfToInsert(message,report_id);
 
@@ -63,9 +64,10 @@ public class ReportRepository {
         );
     }
 
-    public List<Message> getAllMessages(String report_id,List<Message> othersidemessage) {
-        List<String> messageTexts =new ArrayList<>()  ;
-        List<Message> messages=new ArrayList<Message>() ;
+    public List<Message>[] getAllMessages(String report_id) { ;
+        List<Message> messages =new  ArrayList<Message>();
+        List<Message> othersidemessage =new  ArrayList<Message>();
+        ArrayList<Message>[] al = new ArrayList[2];
 
         if(!report_id.equals(NULL)){
             messages = jdbcTemplate.query("SELECT * FROM Message WHERE report_id = ? and sender=?", new Object[]{report_id,currentUser.getID()},new BeanPropertyRowMapper(Message.class));
@@ -73,8 +75,11 @@ public class ReportRepository {
             othersidemessage = jdbcTemplate.query("SELECT * FROM Message WHERE report_id = ? and not sender=?", new Object[]{report_id,currentUser.getID()},new BeanPropertyRowMapper(Message.class));
           //  for (Message message : othermessagese) othersidemessage.add(message.getText());
         }
+        al[0]=new  ArrayList<Message>(messages);
 
-        return messages;
+        al[1]=new  ArrayList<Message>(othersidemessage);
+
+        return al;
     }
     private void setPropertiesOfToInsert(Message message,String report_id1){
         //String report_id= report_id1;
@@ -100,5 +105,9 @@ public class ReportRepository {
         String id = currentUser.getID();
         List<Report> reports = jdbcTemplate.query("SELECT * FROM Report WHERE issuer_id = ?", new Object[]{id},new BeanPropertyRowMapper(Report.class));
         return reports;
+    }
+    public List<Report> getAllReportByCustomerS(){
+        List<Report> r = jdbcTemplate.query("SELECT * FROM Report",new Object[]{},new BeanPropertyRowMapper(Report.class) );
+        return r;
     }
 }

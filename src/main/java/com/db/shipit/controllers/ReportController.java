@@ -3,25 +3,23 @@ import com.db.shipit.models.Message;
 import com.db.shipit.models.Report;
 import com.db.shipit.repositories.PackageRepository;
 import com.db.shipit.repositories.ReportRepository;
-import javafx.util.Pair;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.Tuple;
 import java.util.*;
 class MessageInfo {
     public String textt;
     public String mine;
     public String date;
+
     public MessageInfo(String textt, String mine, String date) {
         this.textt = textt;
         this.mine = mine;
         this.date = date;
     }
-
-
     @Override
     public String toString() {
         return "MessageInfo{" +
@@ -31,6 +29,17 @@ class MessageInfo {
                 '}';
     }
 };
+class MessageInfoPair {
+    public MessageInfo m1;
+    public MessageInfo m2;
+
+    public MessageInfoPair(MessageInfo m1, MessageInfo m2) {
+        this.m1 = m1;
+        this.m2 = m2;
+    }
+};
+
+
 class SortbyMessageNum implements Comparator<Message>
 {
     // Used for sorting in ascending order of
@@ -82,38 +91,40 @@ public class ReportController {
        model.addAttribute("package_id", package_id);
        model.addAttribute("report_id", id);
        model.addAttribute("courier", courier);
-       ArrayList<Message> listofOther=new ArrayList<>();
-       List<Message> messages= reportRepository.getAllMessages(id,listofOther);
-       messages.sort(new SortbyMessageNum());
+
+       List<Message>[] messages =new ArrayList[2];
+       messages= reportRepository.getAllMessages(id);
+       messages[0].sort(new SortbyMessageNum());
        int counter1=0;
        int counter2=0;
-       listofOther.sort(new SortbyMessageNum());
-       ArrayList<MessageInfo> commonList = new ArrayList<>();
-       for (int i=0; i<listofOther.size()+messages.size();i++)
+       messages[1].sort(new SortbyMessageNum());
+       ArrayList<MessageInfoPair> mylist = new ArrayList<>();
+   //  ArrayList<MessageInfo> otherList = new ArrayList<>();
+       for (int i=0; i<messages[1].size()+messages[0].size();i++)
        {
-           if(counter1<messages.size()&&counter2<listofOther.size()) {
-               if ((Integer.parseInt(messages.get(counter1).getMessage_number())) < (Integer.parseInt(listofOther.get(counter2).getMessage_number()))) {
-                   commonList.add(new MessageInfo(messages.get(counter1).getText(), "true", messages.get(counter1).getDate()));
+           if(counter1<messages[0].size()&&counter2< messages[1].size()) {
+               if ((Integer.parseInt(messages[0].get(counter1).getMessage_number())) < (Integer.parseInt( messages[1].get(counter2).getMessage_number()))) {
+                   mylist.add(new MessageInfoPair(new MessageInfo(messages[0].get(counter1).getText(), "true", messages[0].get(counter1).getDate()),new MessageInfo("", "false", messages[0].get(counter1).getDate())));
                    counter1++;
                } else {
-                   commonList.add(new MessageInfo(listofOther.get(counter2).getText(), "false", listofOther.get(counter2).getDate()));
+                   mylist.add(new MessageInfoPair(new MessageInfo("", "true",  messages[1].get(counter2).getDate()),(new MessageInfo( messages[1].get(counter2).getText(), "false",  messages[1].get(counter2).getDate()))));
+
                    counter2++;
                }
            }
-           else if (counter1<messages.size())
+           else if (counter1<messages[0].size())
            {
-               commonList.add(new MessageInfo(messages.get(counter1).getText(), "true", messages.get(counter1).getDate()));
+               mylist.add(new MessageInfoPair(new MessageInfo(messages[0].get(counter1).getText(), "true", messages[0].get(counter1).getDate()),new MessageInfo("", "false", messages[0].get(counter1).getDate())));
                counter1++;
-
-           }else if (counter2<listofOther.size())
-           { commonList.add(new MessageInfo(listofOther.get(counter2).getText(), "false", listofOther.get(counter2).getDate()));
+           }else if (counter2< messages[1].size())
+           {    mylist.add(new MessageInfoPair(new MessageInfo("", "true",  messages[1].get(counter2).getDate()),new MessageInfo( messages[1].get(counter2).getText(), "false",  messages[1].get(counter2).getDate())));
                counter2++;
            }
 
        }
-       for(int k=0;k<commonList.size();k++)
-          System.out.println(commonList.get(k).toString());
-       model.addAttribute("messages", commonList);
+    //   for(int k=0;k<commonList.size();k++)
+      //    System.out.println(commonList.get(k).toString());
+       model.addAttribute("myList", mylist);
 
        return "report";
    }
@@ -124,14 +135,8 @@ public class ReportController {
                               @ModelAttribute("newMessage") Message newMessage,Model model){
 
         Report report = reportRepository.getReportByID(report_id);
-       // Message mm = new Message();
-      //  System.out.println("New Message :"+model.getAttribute("newMessage"));
-        //String newMessage=(String) model.getAttribute("newMessage");
-      //  mm.setText(newMessage);
         String courier="-";
         courier= packageRepository.getAPackageCourier( package_id);
-       // Message newMessagee= new Message();
-      //  newMessagee.setText(newMessage);
         reportRepository.commitMessage(newMessage,report_id);
         return "redirect:report?id=" + report_id+"&package_id="+package_id;
    }

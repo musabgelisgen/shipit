@@ -77,7 +77,7 @@
     </div>
 
     <div class="row vertical-center-row">
-       <p class="h7 mb-7 float-left" style="color: white">Description:     <span th:text="${report.getDescription()}" class="h5 mb-5 " style="color: darkgray"></span></p>
+        <p class="h7 mb-7 float-left" style="color: white">Description:     <span th:text="${report.getDescription()}" class="h5 mb-5 " style="color: darkgray"></span></p>
     </div>
 
     <div class="row vertical-center-row">
@@ -116,12 +116,12 @@
             </table>
         </ul>
 
-            <form id="dialogueForm" name="dialogueForm" ACTION='#' th:action="@{/chat.sendMessage}"  th:object="${newMessage}" method="GET" >
-                <label for="newMessagee"> </label><input type="text" th:field="*{text}" minlength="1" maxlength="30" class="form-control mb-4" id="newMessagee" name="newMessagee" placeholder="Enter a Message...">
-                <input type="hidden" id="package_id" name="package_id"  th:value ="${report.getPackage_id()}"/>
-                <input type="hidden" id="id" name="id"  th:value="${report.getReport_id()}"/>
-                <button type="submit" class="btn btn-success">Send</button>
-            </form>
+        <form id="dialogueForm" name="dialogueForm" ACTION='#' th:action="@{/cs_chat.sendMessage}"  th:object="${newMessage}" method="GET" >
+            <label for="newMessagee"> </label><input type="text" th:field="*{text}" minlength="1" maxlength="30" class="form-control mb-4" id="newMessagee" name="newMessagee" placeholder="Enter a Message...">
+            <input type="hidden" id="package_id" name="package_id"  th:value ="${report.getPackage_id()}"/>
+            <input type="hidden" id="id" name="id"  th:value="${report.getReport_id()}"/>
+            <button type="submit" class="btn btn-success">Send</button>
+        </form>
 
     </div>
 </div>

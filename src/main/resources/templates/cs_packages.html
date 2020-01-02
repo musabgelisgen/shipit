@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Packages</title>
+    <link href="packages.css" rel="stylesheet"/>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <script>
+        function rowClicked(value) {
+            location.href = "/myurl?param=" + value;
+        }
+    </script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Shipit</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/cs_packages">Packages Associated with your Branch</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/cs_reports">Report Pool</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/my_account">Profile</a>
+            </li>
+
+            <li class="nav-item">
+                <form action="/my_account?logout=true" method="POST">
+                    <a class="nav-link" onclick="this.parentNode.submit()">Logout</a>
+                </form>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0" action="/cs_package" method="GET">
+            <input name="id" class="form-control mr-sm-2" type="search" placeholder="Search a Package" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+
+<div class="w-25 center_div">
+    <p align="center">Package Related To Your Branch</p>
+</div>
+<div class="w-50 center_div ">
+    <table class="table table-hover table-dark">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">PackageID</th>
+            <th scope="col">Send Date</th>
+            <th scope="col">Delivery Date</th>
+            <th scope="col">Status</th>
+            <th scope="col">From</th>
+            <th scope="col">Current</th>
+            <th scope="col">Destination</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="package, iStat : ${packages}">
+            <th scope="row" th:text="${iStat.index + 1}" th:value="${iStat.index + 1}"></th>
+            <td th:text="${package.package_id}"></td>
+            <td th:text="${package.send_date}"></td>
+            <td th:text="${package.delivery_date}"></td>
+            <td th:text="${package.status}"><a th:href="@{/package(id=${package.package_id})}"></td>
+            <td th:text="${package.from_city}"></td>
+            <td th:text="${package.curr_city}"></td>
+            <td th:text="${package.to_city}"></td>
+            <td><a th:href="@{/file_report(package_id=${package.package_id}, issuer_id=${package.receiver_id}, report='1')}" class="btn btn-warning">Move Forward</a></td>
+            <td><a th:href="@{/package(id=${package.package_id})}" class="btn btn-info">About</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="w-50 center_div">
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="receiver" name="receiver" th:checked="${receiver}" >
+        <label class="form-check-label" for="receiver">
+            Receiver
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="sender" name="sender" th:checked="${sender}" >
+        <label class="form-check-label" for="sender">
+            Sender
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="preparing" name="preparing" th:checked="${preparing}" >
+        <label class="form-check-label" for="preparing">
+            Preparing
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="onTransfer" name="onTransfer" th:checked="${onTransfer}" >
+        <label class="form-check-label" for="onTransfer">
+            On Transfer
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="onBranch" name="onBranch" th:checked="${onBranch}" >
+        <label class="form-check-label" for="onBranch">
+            On Branch
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="delivered" name="delivered" th:checked="${delivered}" >
+        <label class="form-check-label" for="delivered">
+            Delivered
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="declined" name="declined" th:checked="${declined}" >
+        <label class="form-check-label" for="declined">
+            Declined
+        </label>
+    </div>
+</div>
+</body>
+</html>

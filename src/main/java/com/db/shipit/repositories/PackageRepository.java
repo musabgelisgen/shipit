@@ -31,6 +31,12 @@ public class PackageRepository {
         List<Package> packages = jdbcTemplate.query("SELECT * FROM Package WHERE receiver_id = ? OR sender_id = ?", new Object[]{id, id},new BeanPropertyRowMapper(Package.class));
         return packages;
     }
+    public List<Package> getAllBranchPackages(Map<String, Boolean> modifications) {
+        String id = currentUser.getID();
+
+        List<Package> packages = jdbcTemplate.query("SELECT package_id,delivery_date,send_date,status, from_city, curr_city, to_city FROM Package WHERE from_city in (SELECT city_name FROM Branch, CustomerService WHERE name=branch_name AND ID = ? )  OR curr_city in (SELECT city_name FROM Branch,CustomerService WHERE name=branch_name AND ID = ? ) OR to_city in (SELECT city_name FROM Branch,CustomerService WHERE name=branch_name AND ID = ? )", new Object[]{id,id, id},new BeanPropertyRowMapper(Package.class));
+        return packages;
+    }
 
     public String getAPackageCourier(String package_id) {
         String id = currentUser.getID();
