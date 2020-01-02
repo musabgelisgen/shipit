@@ -51,7 +51,7 @@ public class PackageController {
     public String commitSendPackage (Model model, @ModelAttribute("package") Package packet){
         System.out.println(packet);
         packageRepository.commitPackage(packet);
-        return "send_package";
+        return "redirect:packages";
     }
 
     @GetMapping("/packages")
