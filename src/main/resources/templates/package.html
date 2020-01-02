@@ -15,51 +15,118 @@
     </script>
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Shipit</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-<div class="w-25 center_div ">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/packages">Packages</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/reports">Reports</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/my_subscriptions">Subscriptions</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/my_account">Profile</a>
+            </li>
 
-    <table class="table table-hover table-dark" th:object="${package}">
-        <thead>
-        <tr>
-            <th scope="col">Package Info</th>
-            <th scope="col"></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td th:text="Sender"></td>
-            <td th:text="${sender}"></td>
-        </tr>
-        <tr>
-            <td th:text="Receiver"></td>
-            <td th:text="${receiver}"></td>
-        </tr>
-        <tr>
-            <td>Payment Side</td>
-            <td th:text="${package.payment_side}"></td>
-        </tr>
-        <tr>
-            <td>Payment Status</td>
-            <td th:text="${package.payment_status}"></td>
-        </tr>
-        <tr>
-            <td>Package Status</td>
-            <td th:text="${package.status}"></td>
-        </tr>
-        <tr>
-            <td>Delivery Type</td>
-            <td th:text="${package.delivery_type}"></td>
-        </tr>
-        <tr>
-            <td>Package Type</td>
-            <td th:text="${package.package_type}"></td>
-        </tr>
-        <tr>
-            <td>Cost</td>
-            <td th:text="${cost}"></td>
-        </tr>
-        </tbody>
-    </table>
+            <li class="nav-item">
+                <form action="/my_account?logout=true" method="POST">
+                    <a class="nav-link" onclick="this.parentNode.submit()">Logout</a>
+                </form>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0" action="/package" method="GET">
+            <input name="id" class="form-control mr-sm-2" type="search" placeholder="Search a Package" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+
+    <div class="w-75 center_div ">
+
+        <table class="table table-hover table-dark" th:object="${package}">
+            <thead>
+            <tr>
+                <th scope="col">Package Info</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td th:text="Sender"></td>
+                <td th:text="${sender}"></td>
+            </tr>
+            <tr>
+                <td th:text="Receiver"></td>
+                <td th:text="${receiver}"></td>
+            </tr>
+            <tr>
+                <td>Payment Side</td>
+                <td th:text="${package.payment_side}"></td>
+            </tr>
+            <tr>
+                <td>Payment Status</td>
+                <td th:text="${package.payment_status}"></td>
+            </tr>
+            <tr>
+                <td>Package Status</td>
+                <td th:text="${package.status}"></td>
+            </tr>
+            <tr>
+                <td>Delivery Type</td>
+                <td th:text="${package.delivery_type}"></td>
+            </tr>
+            <tr>
+                <td>Package Type</td>
+                <td th:text="${package.package_type}"></td>
+            </tr>
+            <tr>
+                <td>Cost</td>
+                <td th:text="${cost}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <div class="center_div"></div>
+
+
+    <div class="w-75 center_div">
+        <table class="table table-hover table-dark" th:object="${package}">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td th:classappend="${package.status == 'preparing'} ? 'bg-success' : none" style="text-align:center"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2emN40IzSL2kjsL1WBZ3vm_OOpBNywnFZmNNjn-PPTp7CB2AErQ&s" alt="" width="60" height="60"></td>
+                    <td th:classappend="${package.status == 'onBranch'} ? 'bg-success' : none" style="text-align:center"><img src="https://www.clipartwiki.com/clipimg/detail/42-423265_services-repair-delivery-truck-icon-png.png" alt="" width="90" height="60"></td>
+                    <td th:classappend="${package.status == 'onTransfer'} ? 'bg-success' : none" style="text-align:center"><img src="https://as1.ftcdn.net/jpg/02/29/69/06/500_F_229690634_Rvql6omorKwg8PneaHqO1m59SMvmEgKV.jpg" alt="" width="60" height="60"></td>
+                    <td th:classappend="${package.status == 'declined' || package.status == 'delivered'} ? 'bg-success' : none" style="text-align:center"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQV6g9F84fD6S25SgXduy98jTDYyZ8Jjh7bnkoARyrik3xcz1UN&s" alt="" width="60" height="60"></td>
+                </tr>
+                <tr>
+                    <td style="text-align:center" th:text="preparing"></td>
+                    <td style="text-align:center" th:text="onTransfer"></td>
+                    <td style="text-align:center" th:text="onBranch"></td>
+                    <td style="text-align:center" th:text="${package.status}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
 </div>
 
 </body>
