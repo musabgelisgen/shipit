@@ -35,8 +35,13 @@ public class CustomerRepository {
         return customers;
     }
 
-    public void changeCustomerBalance(int amount){
-        jdbcTemplate.update("UPDATE Customer SET credits = credits + ? WHERE ID = ?", amount, currentUser.getID());
+    public boolean changeCustomerBalance(int amount){
+        Customer customer = searchCustomerFromId(currentUser.getID());
+        if(customer.getCredits() + amount >= 0) {
+            jdbcTemplate.update("UPDATE Customer SET credits = credits + ? WHERE ID = ?", amount, currentUser.getID());
+            return true;
+        }
+        return false;
     }
 
     public int getCustomerBalance(){

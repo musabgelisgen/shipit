@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.db.shipit.ShipitApplication.currentUser;
+
 @Controller
 public class CustomerRegisterController {
 
@@ -25,6 +27,9 @@ public class CustomerRegisterController {
 
     @GetMapping("/register")
     public String register(Model model){
+        if(currentUser != null)
+            return "redirect:/my_account";
+
         List<String> cities = branchRepository.getAllBranches().stream().map(Branch::getCity_name).collect(Collectors.toList());
         model.addAttribute("cities", cities);
         model.addAttribute("customer", new Customer());

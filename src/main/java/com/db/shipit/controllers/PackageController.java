@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.db.shipit.ShipitApplication.currentUser;
+
 @Controller
 public class PackageController {
 
@@ -31,14 +33,21 @@ public class PackageController {
 
     @GetMapping("/send_package")
     public String sendPackage (Model model){
-        List<String> receivers = customerRepository.getAllCustomers().stream().map(Customer::getIdAndFullName).collect(Collectors.toList());
-        model.addAttribute("receivers", receivers);
+        if(currentUser == null) {
+            model.addAttribute("user", new User());
+            return "login";
+        }
+        else if(customerRepository.searchCustomerFromId(currentUser.getID()) != null) {
+            List<String> receivers = customerRepository.getAllCustomers().stream().map(Customer::getIdAndFullName).collect(Collectors.toList());
+            model.addAttribute("receivers", receivers);
 
-        List<String> branches = branchRepository.getAllBranches().stream().map(Branch::getBranchAndCityName).collect(Collectors.toList());
-        model.addAttribute("branches", branches);
+            List<String> branches = branchRepository.getAllBranches().stream().map(Branch::getBranchAndCityName).collect(Collectors.toList());
+            model.addAttribute("branches", branches);
 
-        model.addAttribute("package", new Package());
-        return "send_package";
+            model.addAttribute("package", new Package());
+            return "send_package";
+        }
+        return "redirect:/my_account";
     }
 
     @PostMapping("/send_package")
@@ -59,19 +68,27 @@ public class PackageController {
             @RequestParam(value = "declined", required = false, defaultValue = "false") boolean declined,
             Model model){
 
-        Map<String, Boolean> modifications = new HashMap<>();
-        modifications.put("receiver", receiver);
-        modifications.put("sender", sender);
-        modifications.put("preparing", preparing);
-        modifications.put("onTransfer", onTransfer);
-        modifications.put("onBranch", onBranch);
-        modifications.put("delivered", delivered);
-        modifications.put("declined", declined);
+        if(currentUser == null) {
+            model.addAttribute("user", new User());
+            return "login";
+        }
+        else if(customerRepository.searchCustomerFromId(currentUser.getID()) != null) {
+            Map<String, Boolean> modifications = new HashMap<>();
+            modifications.put("receiver", receiver);
+            modifications.put("sender", sender);
+            modifications.put("preparing", preparing);
+            modifications.put("onTransfer", onTransfer);
+            modifications.put("onBranch", onBranch);
+            modifications.put("delivered", delivered);
+            modifications.put("declined", declined);
 
-        List<Package> packages = packageRepository.getAllPackages(modifications);
-        model.addAttribute("packages", packages);
+            List<Package> packages = packageRepository.getAllPackages(modifications);
+            model.addAttribute("packages", packages);
 
-        return "packages";
+            return "packages";
+        }
+        else
+            return "redirect:/my_account";
     }
 
     @GetMapping("/packages/{id}")
@@ -81,15 +98,31 @@ public class PackageController {
 
     @GetMapping("/top_senders")
     public String getTopSenders (Model model) {
-        Map<String, String> top_senders = packageRepository.getTopSenders();
-        model.addAttribute("top_senders", top_senders);
-        return "top_senders";
+        if(currentUser == null) {
+            model.addAttribute("user", new User());
+            return "login";
+        }
+        else if(customerRepository.searchCustomerFromId(currentUser.getID()) == null) {
+            Map<String, String> top_senders = packageRepository.getTopSenders();
+            model.addAttribute("top_senders", top_senders);
+            return "top_senders";
+        }
+        else
+            return "redirect:/my_account";
     }
 
     @GetMapping("/branch_statistics")
     public String getBranchStatistics (Model model) {
-        Map<String, String> branchStatistics = packageRepository.getBranchStatistics();
-        model.addAttribute("branchStatistics", branchStatistics);
-        return "branchStatistics";
+        if(currentUser == null) {
+            model.addAttribute("user", new User());
+            return "login";
+        }
+        else if(customerRepository.searchCustomerFromId(currentUser.getID()) == null) {
+            Map<String, String> branchStatistics = packageRepository.getBranchStatistics();
+            model.addAttribute("branchStatistics", branchStatistics);
+            return "branchStatistics";
+        }
+        else
+            return "redirect:/my_account";
     }
 }

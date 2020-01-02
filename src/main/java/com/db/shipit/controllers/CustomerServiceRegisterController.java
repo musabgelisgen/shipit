@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.db.shipit.ShipitApplication.currentUser;
+
 @Controller
 public class CustomerServiceRegisterController {
 
@@ -25,6 +27,8 @@ public class CustomerServiceRegisterController {
 
     @GetMapping("/cs_register")
     public String customer_service_register(Model model){
+        if(currentUser != null)
+            return "redirect:/my_account";
         List<String> branches = branchRepository.getAllBranches().stream().map(Branch::getName).collect(Collectors.toList());
         model.addAttribute("branches", branches);
         model.addAttribute("customer_service", new CustomerService());
