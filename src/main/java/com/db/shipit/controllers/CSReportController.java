@@ -103,6 +103,14 @@ public class CSReportController {
         return "redirect:cs_report?id=" + report_id+"&package_id="+package_id;
     }
 
+    @GetMapping("/cs_assign_to_me")
+    public String assignToMe( @RequestParam(value = "id", required = true) String report_id                              ){
+        Report report = reportRepository.getReportByID(report_id);
+        reportRepository.assignReport(report_id);
+        return "redirect:cs_reports";
+    }
+
+
     @GetMapping("/cs_reports")
     public String getAllPackages (Model model) {
         List<Report> reports = reportRepository.getAllReportByCustomerS();

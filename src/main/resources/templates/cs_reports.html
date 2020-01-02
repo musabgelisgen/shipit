@@ -51,6 +51,7 @@
             <th scope="col">Report Type</th>
             <th scope="col">Result</th>
             <th scope="col"></th>
+            <th scope="col"></th>
         </tr>
         </thead>
         <tbody>
@@ -60,6 +61,10 @@
             <td th:text="${report.report_status}"></td>
             <td th:text="${report.report_type}"></td>
             <td th:text="${report.result}">
+            <td th:if="${report.handler_id ==null }">
+                <a th:href="@{/cs_assign_to_me(id=${report.report_id})}" class="btn btn-success">Assign to Me</a></td>
+            <td th:if="${report.handler_id !=null }">
+                <p></p></td>
             <td><a th:href="@{/cs_report(id=${report.report_id},package_id=${report.package_id})}" class="btn btn-info">Logs</a></td>
         </tr>
         </tbody>

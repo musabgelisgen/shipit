@@ -2,16 +2,18 @@ package com.db.shipit.repositories;
 
 import com.db.shipit.models.Customer;
 import com.db.shipit.models.Package;
+import com.db.shipit.models.Route;
 import com.db.shipit.models.User;
 import com.db.shipit.utils.CourierPicker;
 import com.db.shipit.utils.DatePicker;
 import com.db.shipit.utils.RandomID;
+import com.sun.deploy.security.SelectableSecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import com.db.shipit.utils.DatePicker;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -96,6 +98,33 @@ public class PackageRepository {
                 .setFrom_city(from)
                 .setCurr_city(from)
                 .setTo_city(to_city);
+    }
+    public void moveForward(String package_id)
+    {
+        List<Package> packages = jdbcTemplate.query("SELECT * FROM Branch B, Package P WHERE B.city_name = P.from_city AND P.package_id = ?", new Object[]{package_id },new BeanPropertyRowMapper(Package.class));
+        List<Route> routes = jdbcTemplate.query("SELECT R.from_city, R.hub, R.to_city FROM Route AS R ,Package AS P WHERE P.from_city = R.from_city AND R.to_city=P.to_city  AND P.package_id = ? ", new Object[]{package_id },new BeanPropertyRowMapper(Route.class));
+        String newCurrentCity="";
+        for (int i =0;i<routes.size();i++)
+        {
+                if(routes.get(i).getHub().equals(packages.get(0).getCurr_city())) {
+                    newCurrentCity = packages.get(0).getTo_city();
+                    break;
+                }
+                else if ((routes.get(i).getFrom_city()).equals(packages.get(0).getCurr_city())) {
+
+                    if((routes.get(i).getHub()).equals("null"))
+                        newCurrentCity = packages.get(0).getTo_city();
+                    else
+                        newCurrentCity = routes.get(i).getHub();
+                    break;
+
+                }
+        }
+        if(newCurrentCity.equals(""))
+            System.out.println("No update");
+      else
+        jdbcTemplate.update("UPDATE Package SET curr_city = ? WHERE package_id = ? ; ",new Object[]{newCurrentCity,package_id} );
+
     }
 
     public void updatePackageStatus(String id, int accept, int decline) {

@@ -77,7 +77,7 @@
             <td th:text="${package.from_city}"></td>
             <td th:text="${package.curr_city}"></td>
             <td th:text="${package.to_city}"></td>
-            <td><a th:href="@{/file_report(package_id=${package.package_id}, issuer_id=${package.receiver_id}, report='1')}" class="btn btn-warning">Move Forward</a></td>
+            <td><a th:href="@{/cs_move_package(package_id=${package.package_id})}" class="btn btn-warning">Move Forward</a></td>
             <td><a th:href="@{/package(id=${package.package_id})}" class="btn btn-info">About</a></td>
         </tr>
         </tbody>

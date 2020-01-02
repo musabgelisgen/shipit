@@ -108,6 +108,13 @@ public class ReportRepository {
     }
     public List<Report> getAllReportByCustomerS(){
         List<Report> r = jdbcTemplate.query("SELECT * FROM Report",new Object[]{},new BeanPropertyRowMapper(Report.class) );
+       System.out.println( r.get(0).getHandler_id());
         return r;
+    }
+    public void assignReport(String reportID)
+    {
+        String id = currentUser.getID();
+        jdbcTemplate.update("UPDATE Report SET handler_id = ? WHERE report_id = ? ",new Object[]{id,reportID} );
+
     }
 }
