@@ -1,13 +1,11 @@
 package com.db.shipit.controllers;
 
-import com.db.shipit.models.Branch;
-import com.db.shipit.models.Customer;
+import com.db.shipit.models.*;
 import com.db.shipit.models.Package;
-import com.db.shipit.models.User;
-import com.db.shipit.repositories.BranchRepository;
-import com.db.shipit.repositories.CustomerRepository;
-import com.db.shipit.repositories.PackageRepository;
-import com.db.shipit.repositories.UserRepository;
+import com.db.shipit.repositories.*;
+import com.db.shipit.utils.CourierPicker;
+import com.db.shipit.utils.DatePicker;
+import com.db.shipit.utils.RandomID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,6 +33,9 @@ public class PackageController {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    SubscriptionRepository subscriptionRepository;
+
     @GetMapping("/send_package")
     public String sendPackage (Model model){
         if(currentUser == null) {
@@ -56,6 +57,39 @@ public class PackageController {
 
     @PostMapping("/send_package")
     public String commitSendPackage (Model model, @ModelAttribute("package") Package packet){
+        String id = RandomID.generateUUID();
+        String receiverId = packet.getReceiver_id().substring(0, packet.getReceiver_id().indexOf('-'));
+        String paymentStatus = packet.getPayment_side().equalsIgnoreCase("sender") ? "paid" : "not paid";
+        String from = packet.getFrom_city().substring(packet.getFrom_city().indexOf('-') + 1);
+
+        Customer c = customerRepository.searchCustomerFromId(receiverId);
+        String to_city = c.getCity_name();
+
+        packet.setPackage_id(id)
+                .setReceiver_id(receiverId)
+                .setSender_id(currentUser.getID())
+                .setSend_date(DatePicker.getDate())
+                .setPayment_status(paymentStatus)
+                .setStatus("preparing")
+                .setCourier(CourierPicker.getRandomCourierName())
+                .setFrom_city(from)
+                .setCurr_city(from)
+                .setTo_city(to_city);
+
+        /*
+        String packageType = packet.getPackage_type();
+        String deliveryType = packet.getDelivery_type();
+         */
+        if(packet.getPayment_side().equals("sender")){
+            List<Subscription> subscriptions = subscriptionRepository.getSubscriptionByID(currentUser.getID());
+            Subscription latestSubscription = subscriptions.get(0);
+            if (latestSubscription.isIs_active()) {
+                Subscription currSubscription = latestSubscription;
+
+            }
+            customerRepository.changeCustomerBalance(- ((int) packet.getCost()));
+        }
+
         System.out.println(packet);
         packageRepository.commitPackage(packet);
         return "redirect:/packages";
