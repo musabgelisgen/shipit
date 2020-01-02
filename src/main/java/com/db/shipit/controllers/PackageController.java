@@ -78,4 +78,18 @@ public class PackageController {
     public String getPackageInfo (@PathVariable String id, Model model){
         return "package";
     }
+
+    @GetMapping("/top_senders")
+    public String getTopSenders (Model model) {
+        Map<String, String> top_senders = packageRepository.getTopSenders();
+        model.addAttribute("top_senders", top_senders);
+        return "top_senders";
+    }
+
+    @GetMapping("/branch_statistics")
+    public String getBranchStatistics (Model model) {
+        Map<String, String> branchStatistics = packageRepository.getBranchStatistics();
+        model.addAttribute("branchStatistics", branchStatistics);
+        return "branchStatistics";
+    }
 }

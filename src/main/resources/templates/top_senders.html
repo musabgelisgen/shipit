@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My reports</title>
+    <link href="file_report.css" rel="stylesheet"/>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Shipit</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/packages">Packages</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/reports">Reports</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/my_subscriptions">Subscriptions</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/my_account">Profile</a>
+            </li>
+
+            <li class="nav-item">
+                <form action="/my_account?logout=true" method="POST">
+                    <a class="nav-link" onclick="this.parentNode.submit()">Logout</a>
+                </form>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0" action="/package" method="GET">
+            <input name="id" class="form-control mr-sm-2" type="search" placeholder="Search a Package" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+<div class="w-75 center_div ">
+    <table class="table table-hover table-dark">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Sender ID</th>
+            <th scope="col">Package Count</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="top_sender, iStat : ${top_senders}">
+            <th scope="row" th:text="${iStat.index + 1}" th:value="${iStat.index + 1}"></th>
+            <td th:text="${top_sender.sender_id}"></td>
+            <td th:text="${top_sender.total_packages}"></td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+</body>
+</html>

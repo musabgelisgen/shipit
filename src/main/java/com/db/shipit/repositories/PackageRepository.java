@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import com.db.shipit.utils.DatePicker;
 
 import java.util.List;
 import java.util.Map;
@@ -44,6 +45,17 @@ public class PackageRepository {
         List<Package> packages = jdbcTemplate.query("SELECT * FROM Package WHERE package_id = ? ", new Object[]{package_id },new BeanPropertyRowMapper(Package.class));
         return packages.get(0).getCourier();
     }
+
+    public Map<String, String> getTopSenders(){
+        Map<String, String> list = (Map<String, String>) jdbcTemplate.query("SELECT sender_id, COUNT(package_id) AS total_packages FROM  Package  GROUP BY sender_id ORDER BY total_packages DESC", new BeanPropertyRowMapper(Package.class));
+        return list;
+    }
+
+    public Map<String, String> getBranchStatistics (){
+        Map<String, String> list = (Map<String, String>) jdbcTemplate.query("SELECT * FROM (SELECT curr_city, status, COUNT(package_id) AS total_packages_of_a_status FROM (select package_id, curr_city, status from Package) GROUP BY curr_city, status) NATURAL JOIN", new BeanPropertyRowMapper(Package.class));
+        return list;
+    }
+
     public void commitPackage(Package packet) {
         setPropertiesOfToInsert(packet);
 
