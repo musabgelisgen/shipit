@@ -8,6 +8,69 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
+    <script>
+        $(document).ready(function(){
+            $("#package_type").change(function(){
+                var cost = 0;
+                var packageType = $("#package_type").children("option:selected").val();
+                var deliveryType = $("#delivery_type").children("option:selected").val();
+
+                if (packageType === "lightweight"){
+                    cost = cost + 5;
+                }
+                else if (packageType === "medium"){
+                    cost = cost + 7;
+                }
+                else if (packageType === "heavy"){
+                    cost = cost + 10;
+                }
+
+                if (deliveryType === "normal"){
+                    cost = cost + 5;
+                }
+                else if (deliveryType === "fast"){
+                    cost = cost + 8;
+                }
+                else if (deliveryType === "superfast"){
+                    cost = cost + 10;
+                }
+
+                $("#cost-p").html(cost);
+                $("#cost-p").text(cost);
+                $("#cost-p").val(cost);
+            });
+
+            $("#delivery_type").change(function(){
+                var cost = 0;
+                var packageType = $("#package_type").children("option:selected").val();
+                var deliveryType = $("#delivery_type").children("option:selected").val();
+
+                if (packageType === "lightweight"){
+                    cost = cost + 5;
+                }
+                else if (packageType === "medium"){
+                    cost = cost + 7;
+                }
+                else if (packageType === "heavy"){
+                    cost = cost + 10;
+                }
+
+                if (deliveryType === "normal"){
+                    cost = cost + 5;
+                }
+                else if (deliveryType === "fast"){
+                    cost = cost + 8;
+                }
+                else if (deliveryType === "superfast"){
+                    cost = cost + 10;
+                }
+
+                $("#cost-p").html(cost);
+            });
+        });
+
+    </script>
+
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -91,10 +154,9 @@
         </div>
 
 
-        <!-- Compute Cost -->
-        <button class="btn btn-primary btn-sm" type="button">Compute Cost</button>
-
-        <p id="cost" name="cost" value="0">0</p>
+        <!-- Show Cost -->
+        <button id="cost-btn" class="btn btn-primary btn-sm" type="button" disabled>Cost</button>
+        <p id="cost-p" th:field="*{package_type}" th:name="cost" th:value="0">0</p>
 
         <button class="btn btn-success">Send Package!</button>
 

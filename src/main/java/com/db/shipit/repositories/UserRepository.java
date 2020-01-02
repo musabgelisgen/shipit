@@ -44,4 +44,9 @@ public class UserRepository {
             }
         }
     }
+
+    public User searchUserFromId(String id){
+        List<User> c = jdbcTemplate.query("SELECT * FROM User WHERE ID = ?", new Object[]{id}, new BeanPropertyRowMapper(User.class));
+        return c.size() > 0 ? c.get(0) : null;
+    }
 }

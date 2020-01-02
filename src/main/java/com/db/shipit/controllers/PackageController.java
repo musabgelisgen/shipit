@@ -7,6 +7,7 @@ import com.db.shipit.models.User;
 import com.db.shipit.repositories.BranchRepository;
 import com.db.shipit.repositories.CustomerRepository;
 import com.db.shipit.repositories.PackageRepository;
+import com.db.shipit.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,6 +32,9 @@ public class PackageController {
     @Autowired
     PackageRepository packageRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
     @GetMapping("/send_package")
     public String sendPackage (Model model){
         if(currentUser == null) {
@@ -54,7 +58,7 @@ public class PackageController {
     public String commitSendPackage (Model model, @ModelAttribute("package") Package packet){
         System.out.println(packet);
         packageRepository.commitPackage(packet);
-        return "send_package";
+        return "redirect:/packages";
     }
 
     @GetMapping("/packages")
@@ -66,6 +70,9 @@ public class PackageController {
             @RequestParam(value = "onBranch", required = false, defaultValue = "false") boolean onBranch,
             @RequestParam(value = "delivered", required = false, defaultValue = "false") boolean delivered,
             @RequestParam(value = "declined", required = false, defaultValue = "false") boolean declined,
+            @RequestParam(value = "id", required = false, defaultValue = "0") String id,
+            @RequestParam(value = "accept", required = false, defaultValue = "0") int accept,
+            @RequestParam(value = "decline", required = false, defaultValue = "0") int decline,
             Model model){
 
         if(currentUser == null) {
@@ -82,8 +89,11 @@ public class PackageController {
             modifications.put("delivered", delivered);
             modifications.put("declined", declined);
 
-            List<Package> packages = packageRepository.getAllPackages(modifications);
-            model.addAttribute("packages", packages);
+        if (accept == 1 || decline == 1)
+            packageRepository.updatePackageStatus(id, accept, decline);
+
+        List<Package> packages = packageRepository.getAllPackages(modifications);
+        model.addAttribute("packages", packages);
 
             return "packages";
         }
@@ -91,8 +101,34 @@ public class PackageController {
             return "redirect:/my_account";
     }
 
-    @GetMapping("/packages/{id}")
-    public String getPackageInfo (@PathVariable String id, Model model){
+    @GetMapping("/package")
+    public String getPackageInfo (@RequestParam(value = "id") String id, Model model){
+        Package packet = packageRepository.findPackageById(id);
+
+        if (packet == null)
+            return "redirect:packages";
+
+        model.addAttribute("package", packet);
+
+        String receiver = userRepository.searchUserFromId(packet.getReceiver_id()).getFullName();
+        String sender = userRepository.searchUserFromId(packet.getSender_id()).getFullName();
+
+        if (currentUser.getID().equals(packet.getReceiver_id())){
+            receiver = "(You) " + receiver;
+        }
+        else if (currentUser.getID().equals(packet.getSender_id())){
+            sender = "(You) " + sender;
+        }
+
+        model.addAttribute("sender", sender);
+        model.addAttribute("receiver", receiver);
+
+        String cost = "" + packet.getCost();
+        if (packet.getCost() == -1){
+            cost = "(-1 quota)";
+        }
+        model.addAttribute("cost", cost);
+
         return "package";
     }
 

@@ -2,16 +2,18 @@ package com.db.shipit.repositories;
 
 import com.db.shipit.models.Customer;
 import com.db.shipit.models.Package;
+import com.db.shipit.models.Route;
 import com.db.shipit.models.User;
 import com.db.shipit.utils.CourierPicker;
 import com.db.shipit.utils.DatePicker;
 import com.db.shipit.utils.RandomID;
+import com.sun.deploy.security.SelectableSecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import com.db.shipit.utils.DatePicker;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -96,5 +98,83 @@ public class PackageRepository {
                 .setFrom_city(from)
                 .setCurr_city(from)
                 .setTo_city(to_city);
+
+        String packageType = packet.getPackage_type();
+        String deliveryType = packet.getDelivery_type();
+        
+        double cost = 0;
+        if (packageType.equals("lightweight")){
+            cost = cost + 5;
+        }
+        else if (packageType.equals("medium")){
+            cost = cost + 7;
+        }
+        else if (packageType.equals("heavy")){
+            cost = cost + 10;
+        }
+
+        if (deliveryType.equals("normal")){
+            cost = cost + 5;
+        }
+        else if (deliveryType.equals("fast")){
+            cost = cost + 8;
+        }
+        else if (deliveryType.equals("superfast")){
+            cost = cost + 10;
+        }
+
+        packet.setCost(cost);
+    }
+    public void moveForward(String package_id)
+    {
+        List<Package> packages = jdbcTemplate.query("SELECT * FROM Branch B, Package P WHERE B.city_name = P.from_city AND P.package_id = ?", new Object[]{package_id },new BeanPropertyRowMapper(Package.class));
+        List<Route> routes = jdbcTemplate.query("SELECT R.from_city, R.hub, R.to_city FROM Route AS R ,Package AS P WHERE P.from_city = R.from_city AND R.to_city=P.to_city  AND P.package_id = ? ", new Object[]{package_id },new BeanPropertyRowMapper(Route.class));
+        String newCurrentCity="";
+        for (int i =0;i<routes.size();i++)
+        {
+                if(routes.get(i).getHub().equals(packages.get(0).getCurr_city())) {
+                    newCurrentCity = packages.get(0).getTo_city();
+                    break;
+                }
+                else if ((routes.get(i).getFrom_city()).equals(packages.get(0).getCurr_city())) {
+
+                    if((routes.get(i).getHub()).equals("null"))
+                        newCurrentCity = packages.get(0).getTo_city();
+                    else
+                        newCurrentCity = routes.get(i).getHub();
+                    break;
+
+                }
+        }
+        if(newCurrentCity.equals(""))
+            System.out.println("No update");
+      else
+        jdbcTemplate.update("UPDATE Package SET curr_city = ? WHERE package_id = ? ; ",new Object[]{newCurrentCity,package_id} );
+
+    }
+
+    public void updatePackageStatus(String id, int accept, int decline) {
+        String status = jdbcTemplate.queryForObject("SELECT status FROM Package WHERE package_id = ?", new Object[]{id}, String.class);
+        if (status == null)
+            return;
+
+        if (status.equalsIgnoreCase("declined") || status.equalsIgnoreCase("delivered"))
+            return;
+
+        String date = DatePicker.getDate();
+
+        if (accept == 1){
+            jdbcTemplate.update("UPDATE Package SET status = 'delivered' where package_id = ?;", id);
+            jdbcTemplate.update("UPDATE Package SET delivery_date = ? where package_id = ?;", date, id);
+        }
+        else if (decline == 1){
+            jdbcTemplate.update("UPDATE Package SET status = 'declined' where package_id = ?;", id);
+            jdbcTemplate.update("UPDATE Package SET delivery_date = ? where package_id = ?;", date, id);
+        }
+    }
+
+    public Package findPackageById(String id) {
+        List<Package> query = jdbcTemplate.query("SELECT * FROM Package WHERE package_id = ?", new Object[]{id}, new BeanPropertyRowMapper(Package.class));
+        return query.size() > 0 ? query.get(0) : null;
     }
 }

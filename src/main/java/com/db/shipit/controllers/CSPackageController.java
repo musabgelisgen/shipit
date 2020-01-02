@@ -59,6 +59,12 @@ public class CSPackageController {
         return "cs_send_package";
     }
 
+    @GetMapping("/cs_move_package")
+    public String movePackage (Model model, @ModelAttribute("package") Package packet){
+       packageRepository.moveForward(packet.getPackage_id());
+        return "redirect:cs_packages";
+    }
+
     @GetMapping("/cs_packages")
     public String getAllPackages (
             @RequestParam(value = "receiver", required = false, defaultValue = "false") boolean receiver,
