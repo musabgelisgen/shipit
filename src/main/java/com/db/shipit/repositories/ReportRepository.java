@@ -20,10 +20,6 @@ import static com.db.shipit.ShipitApplication.currentUser;
 @Repository
 public class ReportRepository {
 
-    public ReportRepository() //No parameters makes this the default
-    {
-    }
-
     @Autowired
     private JdbcTemplate jdbcTemplate;
 

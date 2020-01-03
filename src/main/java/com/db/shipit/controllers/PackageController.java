@@ -142,7 +142,7 @@ public class PackageController {
         }
 
         List<Package> packages = packageRepository.getAllPackages(modifications);
-        ArrayList<Boolean> exist= packageRepository.getIfReportExist(packages);
+        List<Boolean> exist= packageRepository.getIfReportExist(packages);
         List<String > existsStrings =new  ArrayList<String>();
         for (int i =0; i< exist.size();i++)
          existsStrings.add(String.valueOf(exist.get(i)));

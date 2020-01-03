@@ -1,9 +1,7 @@
 package com.db.shipit.repositories;
 
-import com.db.shipit.models.Customer;
+import com.db.shipit.models.*;
 import com.db.shipit.models.Package;
-import com.db.shipit.models.Route;
-import com.db.shipit.models.User;
 import com.db.shipit.utils.CourierPicker;
 import com.db.shipit.utils.DatePicker;
 import com.db.shipit.utils.RandomID;
@@ -122,7 +120,15 @@ public class PackageRepository {
 
 
     }
+public List<Boolean> getIfReportExist(List<Package > packages){
+   ArrayList<Boolean> bools = new ArrayList<Boolean>();
+    for (int i =0; i<packages.size();i++){
+        List<Report> reports = jdbcTemplate.query("SELECT * FROM Report WHERE package_id = ?", new Object[]{packages.get(i).getPackage_id()}, new BeanPropertyRowMapper(Report.class));
+        bools.add((reports.size() == 0));
+    }
 
+    return bools;
+}
     public void updatePackageStatus(String id, int accept, int decline) {
         String status = jdbcTemplate.queryForObject("SELECT status FROM Package WHERE package_id = ?", new Object[]{id}, String.class);
         if (status == null)
