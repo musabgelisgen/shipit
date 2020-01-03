@@ -41,7 +41,7 @@ public class AccountController {
         }
         int creditValue = Integer.parseInt(credits);
         if(creditValue != -1)
-            customerRepository.changeCustomerBalance(creditValue);
+            customerRepository.changeCustomerBalance(currentUser.getID(), creditValue);
 
         return "redirect:/my_account";
     }

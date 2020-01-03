@@ -53,7 +53,7 @@ public class SubscriptionController {
             }
 
 
-            if(customerRepository.changeCustomerBalance(-cost))
+            if(customerRepository.changeCustomerBalance(currentUser.getID(), -cost))
                 subscriptionRepository.addSubscription(tierValue);
 
 
