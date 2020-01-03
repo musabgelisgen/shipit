@@ -14,6 +14,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -48,9 +49,11 @@ public class PackageRepository {
         return packages.get(0).getCourier();
     }
 
-    public Map<String, String> getTopSenders(){
-        Map<String, String> list = (Map<String, String>) jdbcTemplate.query("SELECT sender_id, COUNT(package_id) AS total_packages FROM  Package  GROUP BY sender_id ORDER BY total_packages DESC", new BeanPropertyRowMapper(Package.class));
-        return list;
+    public List<Map<String, Object>> getTopSenders(){
+        List<Map<String, Object>> customers = jdbcTemplate.queryForList("SELECT sender_id, COUNT(package_id) AS total_packages FROM Package GROUP BY sender_id ORDER BY total_packages DESC");
+
+
+        return customers;
     }
 
     public Map<String, String> getBranchStatistics (){

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.db.shipit.ShipitApplication.currentUser;
@@ -36,7 +37,7 @@ public class StatisticsController {
             return "login";
         }
         else if(customerRepository.searchCustomerFromId(currentUser.getID()) == null) {
-            Map<String, String> top_senders = packageRepository.getTopSenders();
+            List<Map<String, Object>> top_senders = packageRepository.getTopSenders();
             model.addAttribute("top_senders", top_senders);
             return "top_senders";
         }
