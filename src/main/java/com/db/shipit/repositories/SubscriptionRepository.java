@@ -1,6 +1,5 @@
 package com.db.shipit.repositories;
 
-import com.db.shipit.models.Customer;
 import com.db.shipit.models.Subscription;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
