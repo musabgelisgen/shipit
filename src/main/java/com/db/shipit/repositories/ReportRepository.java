@@ -1,5 +1,6 @@
 package com.db.shipit.repositories;
 
+import com.db.shipit.controllers.CSReportController;
 import com.db.shipit.models.Message;
 import com.db.shipit.models.Report;
 import com.db.shipit.utils.DatePicker;
@@ -18,9 +19,11 @@ import static com.db.shipit.ShipitApplication.currentUser;
 
 @Repository
 public class ReportRepository {
+
     public ReportRepository() //No parameters makes this the default
     {
     }
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -46,10 +49,12 @@ public class ReportRepository {
         List<Report> r = jdbcTemplate.query("SELECT * FROM Report WHERE issuer_id = ?",new Object[]{issuer_id},new BeanPropertyRowMapper(Report.class) );
         return r.size() > 0 ? r.get(0) : null;
     }*/
-    public Report getReportByID(String report_id){
-        List<Report> r = jdbcTemplate.query("SELECT * FROM Report WHERE report_id = ?",new Object[]{report_id},new BeanPropertyRowMapper(Report.class) );
+    public CSReportController.PairOfReportAndUserID getReportByID(String report_id){
 
-        return r.size() > 0 ? r.get(0) : null;
+        String id = currentUser.getID();
+        List<Report> r = jdbcTemplate.query("SELECT * FROM Report WHERE report_id = ?",new Object[]{report_id},new BeanPropertyRowMapper(Report.class) );
+        CSReportController.PairOfReportAndUserID pair= new CSReportController.PairOfReportAndUserID(r.get(0),id);
+        return pair;
     }
 
         public void commitMessage(Message message,String report_id) {
@@ -106,6 +111,13 @@ public class ReportRepository {
         List<Report> reports = jdbcTemplate.query("SELECT * FROM Report WHERE issuer_id = ?", new Object[]{id},new BeanPropertyRowMapper(Report.class));
         return reports;
     }
+    public Report getAllReportsOfPackageID(String package_id) {
+        String id = currentUser.getID();
+        Report d = (Report) jdbcTemplate.queryForObject("SELECT * FROM Report WHERE package_id = '437846' and issuer_id = '51572f'", new Object[]{},Report.class);
+
+        Report reports = jdbcTemplate.queryForObject("SELECT * FROM Report WHERE package_id = ? and issuer_id = ?", new Object[]{package_id,id},Report.class);
+        return reports;
+    }
     public List<Report> getAllReportByCustomerS(){
         List<Report> r = jdbcTemplate.query("SELECT * FROM Report",new Object[]{},new BeanPropertyRowMapper(Report.class) );
        System.out.println( r.get(0).getHandler_id());
@@ -115,6 +127,9 @@ public class ReportRepository {
     {
         String id = currentUser.getID();
         jdbcTemplate.update("UPDATE Report SET handler_id = ? WHERE report_id = ? ",new Object[]{id,reportID} );
+    }
+    public void updateResult(String reportID,String result){
+        jdbcTemplate.update("UPDATE Report SET result= ? WHERE report_id=  ? ",new Object[]{result,reportID} );
 
     }
 }

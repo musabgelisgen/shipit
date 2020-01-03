@@ -19,13 +19,10 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="/packages">Packages</a>
+                <a class="nav-link" href="/cs_packages">Packages Associated with your Branch</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/reports">Reports</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/my_subscriptions">Subscriptions</a>
+                <a class="nav-link" href="/cs_reports">Report Pool</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/my_account">Profile</a>
@@ -37,7 +34,7 @@
                 </form>
             </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0" action="/packages" method="GET">
+        <form class="form-inline my-2 my-lg-0" action="/cs_packages" method="GET">
             <input name="id" class="form-control mr-sm-2" type="search" placeholder="Search a Package" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
@@ -69,10 +66,6 @@
     </div>
 
     <div class="row vertical-center-row">
-        <p class="h7 mb-7 float-left" style="color: white">Result:     <span th:text="${report.getResult()}" class="h5 mb-5 "style="color: darkgray"></span></p>
-    </div>
-
-    <div class="row vertical-center-row">
         <p class="h7 mb-7 float-left" style="color: white">Status:     <span th:text="${report.getReport_status()}" class="h5 mb-5 "style="color: darkgray"></span></p>
     </div>
 
@@ -82,6 +75,23 @@
 
     <div class="row vertical-center-row">
         <p class="h7 mb-7 float-left" style="color: white">Handler ID:     <span th:text="${report.getHandler_id()}" class="h5 mb-5 " style="color: darkgray"></span></p>
+    </div>
+    <div  th:if="${report.handler_id == userId }" class="row vertical-center-row">
+        <form class="text-center border border-light p-10 center_div" ACTION='#' th:action="@{/cs_update_result}"   method="POST">
+
+            <select th:name="result" class="custom-select controls" id="result">
+                <option th:value="positive" selected>positive</option>
+                <option th:value="negative" selected>negative</option>
+            </select>
+            <input type="hidden" id="package_id2" name="package_id2"  th:value ="${report.getPackage_id()}"/>
+            <input type="hidden" id="id2" name="id2"  th:value="${report.getReport_id()}"/>
+            <button type="submit" class="btn btn-success">Update</button>
+
+        </form>
+        <p class="h7 mb-7 float-left" style="color: white">Current Result:     <span th:text="${report.getResult()}" class="h5 mb-5 "style="color: darkgray"></span></p>
+    </div>
+    <div  th:if="${report.handler_id != userId }" class="row vertical-center-row">
+        <p class="h7 mb-7 float-left" style="color: white">Result:     <span th:text="${report.getResult()}" class="h5 mb-5 "style="color: darkgray"></span></p>
     </div>
 
 </div>

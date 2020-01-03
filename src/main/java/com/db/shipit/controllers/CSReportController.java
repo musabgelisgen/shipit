@@ -14,6 +14,31 @@ import java.util.*;
 @Controller
 public class CSReportController {
 
+    public static class PairOfReportAndUserID{
+        public PairOfReportAndUserID(Report repo, String userId) {
+            this.repo = repo;
+            this.userId = userId;
+        }
+
+        private Report repo;
+        private String userId;
+
+        public Report getRepo() {
+            return repo;
+        }
+
+        public void setRepo(Report repo) {
+            this.repo = repo;
+        }
+
+        public String getUserId() {
+            return userId;
+        }
+
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
+    }
     @Autowired
     ReportRepository reportRepository;
 
@@ -44,7 +69,9 @@ public class CSReportController {
             @RequestParam(value = "package_id", required = true) String package_id,
             @RequestParam(value = "id", required = true) String id,
             Model model){
-        Report report = reportRepository.getReportByID(id);
+        PairOfReportAndUserID pair = reportRepository.getReportByID(id);
+        Report report= pair.getRepo();
+        String userId =pair.getUserId();
         String courier="-";
         courier= packageRepository.getAPackageCourier( package_id);
         model.addAttribute("newMessage", new Message());
@@ -52,8 +79,9 @@ public class CSReportController {
         model.addAttribute("report", report);
         model.addAttribute("package_id", package_id);
         model.addAttribute("report_id", id);
+        model.addAttribute("userId",userId);
         model.addAttribute("courier", courier);
-
+        model.addAttribute("result","");
         List<Message>[] messages =new ArrayList[2];
         messages= reportRepository.getAllMessages(id);
         messages[0].sort(new SortbyMessageNum());
@@ -95,21 +123,26 @@ public class CSReportController {
     public String sendMessage(@RequestParam(value = "package_id", required = true) String package_id,
                               @RequestParam(value = "id", required = true) String report_id,
                               @ModelAttribute("newMessage") Message newMessage,Model model){
-
-        Report report = reportRepository.getReportByID(report_id);
-        String courier="-";
+PairOfReportAndUserID pair      =reportRepository.getReportByID(report_id);
+        Report report = pair.getRepo();
+                String courier="-";
         courier= packageRepository.getAPackageCourier( package_id);
         reportRepository.commitMessage(newMessage,report_id);
         return "redirect:cs_report?id=" + report_id+"&package_id="+package_id;
     }
 
     @GetMapping("/cs_assign_to_me")
-    public String assignToMe( @RequestParam(value = "id", required = true) String report_id                              ){
-        Report report = reportRepository.getReportByID(report_id);
+    public String assignToMe( @RequestParam(value = "id", required = true)  String report_id         ){
+        PairOfReportAndUserID pair    =reportRepository.getReportByID(report_id);
+        Report report = pair.getRepo();
         reportRepository.assignReport(report_id);
         return "redirect:cs_reports";
     }
-
+    @PostMapping("/cs_update_result")
+    public String updateResult( @RequestParam(value = "package_id2", required = true) String package_id,@RequestParam(value = "id2", required = true)  String report_id  ,@RequestParam(value = "result", required = true)  String result       ){
+        reportRepository.updateResult(report_id,result);
+        return "redirect:cs_report?id=" + report_id+"&package_id="+package_id;
+    }
 
     @GetMapping("/cs_reports")
     public String getAllPackages (Model model) {

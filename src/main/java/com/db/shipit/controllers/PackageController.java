@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,6 +82,12 @@ public class PackageController {
             packageRepository.updatePackageStatus(id, accept, decline);
 
         List<Package> packages = packageRepository.getAllPackages(modifications);
+        ArrayList<Boolean> exist= packageRepository.getIfReportExist(packages);
+        List<String > existsStrings =new  ArrayList<String>();
+        for (int i =0; i< exist.size();i++)
+         existsStrings.add(String.valueOf(exist.get(i)));
+        model.addAttribute("exists",existsStrings);
+
         model.addAttribute("packages", packages);
 
         return "packages";

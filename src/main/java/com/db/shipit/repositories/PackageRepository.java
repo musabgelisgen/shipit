@@ -1,9 +1,7 @@
 package com.db.shipit.repositories;
 
-import com.db.shipit.models.Customer;
+import com.db.shipit.models.*;
 import com.db.shipit.models.Package;
-import com.db.shipit.models.Route;
-import com.db.shipit.models.User;
 import com.db.shipit.utils.CourierPicker;
 import com.db.shipit.utils.DatePicker;
 import com.db.shipit.utils.RandomID;
@@ -98,6 +96,19 @@ public class PackageRepository {
                 .setFrom_city(from)
                 .setCurr_city(from)
                 .setTo_city(to_city);
+    }
+    public ArrayList<Boolean>  getIfReportExist(List<Package>packages){
+        ArrayList<Boolean> list =new ArrayList<>();
+        for (Package packagee: packages ) {
+            String packageId =packagee.getPackage_id();
+            ReportRepository reportRepository= new ReportRepository();
+          Report reports=reportRepository.getAllReportsOfPackageID(packageId);
+            if(reports==null)
+               list.add(new Boolean(true));
+            else
+                list.add(new Boolean(false));
+        }
+        return list;
     }
     public void moveForward(String package_id)
     {
