@@ -118,7 +118,8 @@ public class ReportRepository {
     }
     public List<Report> getAllReportByCustomerS(){
         List<Report> r = jdbcTemplate.query("SELECT * FROM Report",new Object[]{},new BeanPropertyRowMapper(Report.class) );
-       System.out.println( r.get(0).getHandler_id());
+
+        //System.out.println( r.get(0).getHandler_id());
         return r;
     }
     public void assignReport(String reportID)

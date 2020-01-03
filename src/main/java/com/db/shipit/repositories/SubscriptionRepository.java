@@ -1,6 +1,5 @@
 package com.db.shipit.repositories;
 
-import com.db.shipit.models.Customer;
 import com.db.shipit.models.Subscription;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -57,12 +56,16 @@ public class SubscriptionRepository {
 
         jdbcTemplate.update("UPDATE Subscription SET end_date = ? WHERE ID = ? AND subscription_number = ?", newDateString, latestSubscription.getID(), latestSubscription.getSubscriptionNumber());
         jdbcTemplate.update("UPDATE Subscription SET used_package_rights = ? WHERE ID = ? AND subscription_number = ?", 0, latestSubscription.getID(), latestSubscription.getSubscriptionNumber());
-        customerRepository.changeCustomerBalance(-cost);
+        customerRepository.changeCustomerBalance(currentUser.getID(), -cost);
     }
 
     public void addSubscription(int tier) throws ParseException {
         List<Subscription> subscriptions = getSubscriptionByID(currentUser.getID());
-        Subscription latestSubscription = subscriptions.get(0);
+        int sub_no = 0;
+        if(subscriptions.size() > 0){
+            Subscription latestSubscription = subscriptions.get(0);
+            sub_no = latestSubscription.getSubscriptionNumber();
+        }
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date today = new Date();
         Calendar cal = Calendar.getInstance();
@@ -72,15 +75,22 @@ public class SubscriptionRepository {
         String todayString = formatter.format(today);
         String newDateString = formatter.format(newDate);
 
-        jdbcTemplate.update("INSERT INTO Subscription VALUES (?,?,?,?,?,?,?)", latestSubscription.getID(), latestSubscription.getSubscriptionNumber() + 1,
+        jdbcTemplate.update("INSERT INTO Subscription VALUES (?,?,?,?,?,?,?)", currentUser.getID(), sub_no + 1,
                                                                                     tier, 0, todayString, newDateString, true);
     }
 
-    public void cancelSubscription() throws ParseException {
+    public void cancelSubscription(){
         List<Subscription> subscriptions = getSubscriptionByID(currentUser.getID());
         Subscription latestSubscription = subscriptions.get(0);
 
         jdbcTemplate.update("UPDATE Subscription SET is_active = ? WHERE ID = ? AND subscription_number = ?", false, latestSubscription.getID(), latestSubscription.getSubscriptionNumber());
+    }
+
+    public void updateTier(String customerID){
+        List<Subscription> subscriptions = getSubscriptionByID(customerID);
+        Subscription latestSubscription = subscriptions.get(0);
+
+        jdbcTemplate.update("UPDATE Subscription SET used_package_rights = ? WHERE ID = ? AND subscription_number = ?", latestSubscription.getUsedPackageRights() + 1, latestSubscription.getID(), latestSubscription.getSubscriptionNumber());
     }
 
 }

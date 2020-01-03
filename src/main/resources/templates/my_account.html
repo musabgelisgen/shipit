@@ -12,7 +12,7 @@
     <script>
         $(function() {
             $('[data-toggle="popover"]').popover({
-                title: "Buy Subscription",
+                title: "Charge Balance",
                 html: true,
                 sanitize: false,
                 content: function() {
@@ -51,6 +51,15 @@
             <li class="nav-item">
                 <a class="nav-link" href="/my_account">Profile</a>
             </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Statistics
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/top_senders">Top Senders</a>
+                    <a class="dropdown-item" href="/percentage">Percentage Distribution</a>
+                </div>
+            </li>
 
             <li class="nav-item">
                 <form action="/my_account?logout=true" method="POST">
@@ -58,7 +67,7 @@
                 </form>
             </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0" action="/package" method="GET">
+        <form class="form-inline my-2 my-lg-0" action="/packages" method="GET">
             <input name="id" class="form-control mr-sm-2" type="search" placeholder="Search a Package" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
@@ -109,12 +118,6 @@
     </div>
 
 </div>
-
-<form th:action="@{/my_account}" method="POST">
-    <div class="w-25 center_div mt-10">
-        <button align="center" class="btn btn-danger" type="submit" th:name="logout" th:value="True">Log out</button>
-    </div>
-</form>
 
 </body>
 </html>

@@ -1,7 +1,9 @@
 package com.db.shipit.repositories;
 
-import com.db.shipit.models.*;
+import com.db.shipit.models.Customer;
 import com.db.shipit.models.Package;
+import com.db.shipit.models.Route;
+import com.db.shipit.models.User;
 import com.db.shipit.utils.CourierPicker;
 import com.db.shipit.utils.DatePicker;
 import com.db.shipit.utils.RandomID;
@@ -12,6 +14,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -48,9 +51,11 @@ public class PackageRepository {
         return packages.get(0).getCourier();
     }
 
-    public Map<String, String> getTopSenders(){
-        Map<String, String> list = (Map<String, String>) jdbcTemplate.query("SELECT sender_id, COUNT(package_id) AS total_packages FROM  Package  GROUP BY sender_id ORDER BY total_packages DESC", new BeanPropertyRowMapper(Package.class));
-        return list;
+    public List<Map<String, Object>> getTopSenders(){
+        List<Map<String, Object>> customers = jdbcTemplate.queryForList("SELECT sender_id, COUNT(package_id) AS total_packages FROM Package GROUP BY sender_id ORDER BY total_packages DESC");
+
+
+        return customers;
     }
 
     public Map<String, String> getBranchStatistics (){
@@ -59,7 +64,7 @@ public class PackageRepository {
     }
 
     public void commitPackage(Package packet) {
-        setPropertiesOfToInsert(packet);
+        //setPropertiesOfToInsert(packet);
 
         jdbcTemplate.update("INSERT INTO Package VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                 packet.getPackage_id(),
@@ -79,96 +84,42 @@ public class PackageRepository {
                 packet.getCost());
     }
 
-    private void setPropertiesOfToInsert(Package packet){
-        String id = RandomID.generateUUID();
-        String receiverId = packet.getReceiver_id().substring(0, packet.getReceiver_id().indexOf('-'));
-        String paymentStatus = packet.getPayment_side().equalsIgnoreCase("sender") ? "paid" : "not paid";
-        String from = packet.getFrom_city().substring(packet.getFrom_city().indexOf('-') + 1);
-
-        Customer c = customerRepository.searchCustomerFromId(receiverId);
-        String to_city = c.getCity_name();
-
-        packet.setPackage_id(id)
-                .setReceiver_id(receiverId)
-                .setSender_id(currentUser.getID())
-                .setSend_date(DatePicker.getDate())
-                .setPayment_status(paymentStatus)
-                .setStatus("preparing")
-                .setCourier(CourierPicker.getRandomCourierName())
-                .setFrom_city(from)
-                .setCurr_city(from)
-                .setTo_city(to_city);
-
-        String packageType = packet.getPackage_type();
-        String deliveryType = packet.getDelivery_type();
-        
-        double cost = 0;
-        if (packageType.equals("lightweight")){
-            cost = cost + 5;
-        }
-        else if (packageType.equals("medium")){
-            cost = cost + 7;
-        }
-        else if (packageType.equals("heavy")){
-            cost = cost + 10;
-        }
-
-        if (deliveryType.equals("normal")){
-            cost = cost + 5;
-        }
-        else if (deliveryType.equals("fast")){
-            cost = cost + 8;
-        }
-        else if (deliveryType.equals("superfast")){
-            cost = cost + 10;
-        }
-
-        packet.setCost(cost);
-    }
-    public ArrayList<Boolean>  getIfReportExist(List<Package>packages){
-        ArrayList<Boolean> list =new ArrayList<>();
-        for (Package packagee: packages ) {
-            String packageId =packagee.getPackage_id();
-
-          List<Report> reports=reportRepository.getAllReportsOfPackageID(packageId);
-            if(reports.size()==0)
-               list.add(new Boolean(true));
-            else
-                list.add(new Boolean(false));
-        }
-        return list;
-    }
     public void moveForward(String package_id)
     {
         List<Package> packages = jdbcTemplate.query("SELECT * FROM Branch B, Package P WHERE B.city_name = P.from_city AND P.package_id = ?", new Object[]{package_id },new BeanPropertyRowMapper(Package.class));
         List<Route> routes = jdbcTemplate.query("SELECT R.from_city, R.hub, R.to_city FROM Route AS R ,Package AS P WHERE P.from_city = R.from_city AND R.to_city=P.to_city  AND P.package_id = ? ", new Object[]{package_id },new BeanPropertyRowMapper(Route.class));
         String newCurrentCity="";
-        for (int i =0;i<routes.size();i++)
-        {
+        String destination = "";
+        for (int i =0;i<routes.size();i++) {
                 if(routes.get(i).getHub().equals(packages.get(0).getCurr_city())) {
                     newCurrentCity = packages.get(0).getTo_city();
-                    jdbcTemplate.update("UPDATE Package SET status = ? WHERE package_id = ? ; ",new Object[]{"onBranch",package_id} );
+                    destination = packages.get(0).getTo_city();
                     break;
                 }
                 else if ((routes.get(i).getFrom_city()).equals(packages.get(0).getCurr_city())) {
 
                     if((routes.get(i).getHub()).equals("null"))
-                    {
-                        jdbcTemplate.update("UPDATE Package SET status = ? WHERE package_id = ? ; ",new Object[]{"onBranch",package_id} );
                         newCurrentCity = packages.get(0).getTo_city();
-                    }
-                    else{
-                        jdbcTemplate.update("UPDATE Package SET status = ? WHERE package_id = ? ; ",new Object[]{"onTransfer",package_id} );
+                    else
                         newCurrentCity = routes.get(i).getHub();
-                    }
                     break;
+
 
                 }
         }
         if(newCurrentCity.equals(""))
             System.out.println("No update");
-      else
-        jdbcTemplate.update("UPDATE Package SET curr_city = ? WHERE package_id = ? ; ",new Object[]{newCurrentCity,package_id} );
+      else{
+          if (destination.equals(newCurrentCity)){
+            jdbcTemplate.update("UPDATE Package SET status = ? WHERE package_id = ? ; ",new Object[]{"onBranch",package_id} );
+          }
+          else {
+            jdbcTemplate.update("UPDATE Package SET status = ? WHERE package_id = ? ; ",new Object[]{"onTransfer",package_id} );
+          }
+          jdbcTemplate.update("UPDATE Package SET curr_city = ? WHERE package_id = ? ; ",new Object[]{newCurrentCity,package_id} );
+        }
+
+
 
     }
 

@@ -41,7 +41,7 @@ public class CustomerServiceRegisterController {
         System.out.println(customerService);
 
         customerRepository.saveCustomerService(customerService);
-        return "customer_service_register";
+        return "register:my_account";
     }
 }
 

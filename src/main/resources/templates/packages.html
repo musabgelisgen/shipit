@@ -33,6 +33,15 @@
             <li class="nav-item">
                 <a class="nav-link" href="/my_account">Profile</a>
             </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Statistics
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/top_senders">Top Senders</a>
+                    <a class="dropdown-item" href="/percentage">Percentage Distribution</a>
+                </div>
+            </li>
 
             <li class="nav-item">
                 <form action="/my_account?logout=true" method="POST">
@@ -40,7 +49,7 @@
                 </form>
             </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0" action="/package" method="GET">
+        <form class="form-inline my-2 my-lg-0" action="/packages" method="GET">
             <input name="id" class="form-control mr-sm-2" type="search" placeholder="Search a Package" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
@@ -50,6 +59,13 @@
 <div class="w-25 center_div">
     <p align="center">Package History</p>
 </div>
+
+<div class="w-25 center_div">
+    <div align="center">
+        <a class="btn btn-primary" href="/send_package">Send a Package</a>
+    </div>
+</div>
+
 <div class="w-75 center_div ">
     <table class="table table-hover table-dark">
         <thead>
@@ -88,7 +104,7 @@
                 <td><a th:href="@{/packages(id=${package.package_id}, accept='1')}" class="btn btn-success">Accept</a></td>
                 <td><a th:href="@{/packages(id=${package.package_id}, decline='1')}" class="btn btn-danger">Decline</a></td>
                 <td th:if="${exists[iStat.index] =='true' }">
-                        <a th:href="@{/report(id=${package.package_id}, report='1')}" class="btn btn-warning">Report</a></td>
+                    <a th:href="@{/file_report(id=${package.package_id}, issuer_id=${customer})}" class="btn btn-warning">Report</a></td>
                 <td th:if="${exists[iStat.index]=='false' }">
                     <p></p></td>
             </div>
@@ -99,49 +115,5 @@
     </table>
 </div>
 
-<div class="w-50 center_div">
-    <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="" id="receiver" name="receiver" th:checked="${receiver}" >
-        <label class="form-check-label" for="receiver">
-            Receiver
-        </label>
-    </div>
-    <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="" id="sender" name="sender" th:checked="${sender}" >
-        <label class="form-check-label" for="sender">
-            Sender
-        </label>
-    </div>
-    <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="" id="preparing" name="preparing" th:checked="${preparing}" >
-        <label class="form-check-label" for="preparing">
-            Preparing
-        </label>
-    </div>
-    <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="" id="onTransfer" name="onTransfer" th:checked="${onTransfer}" >
-        <label class="form-check-label" for="onTransfer">
-            On Transfer
-        </label>
-    </div>
-    <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="" id="onBranch" name="onBranch" th:checked="${onBranch}" >
-        <label class="form-check-label" for="onBranch">
-            On Branch
-        </label>
-    </div>
-    <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="" id="delivered" name="delivered" th:checked="${delivered}" >
-        <label class="form-check-label" for="delivered">
-            Delivered
-        </label>
-    </div>
-    <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="" id="declined" name="declined" th:checked="${declined}" >
-        <label class="form-check-label" for="declined">
-            Declined
-        </label>
-    </div>
-</div>
 </body>
 </html>

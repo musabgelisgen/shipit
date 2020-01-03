@@ -26,17 +26,17 @@ public class CustomerRepository {
     }
 
     public Customer searchCustomerFromId(String id){
-        List<Customer> c = jdbcTemplate.query("SELECT * FROM Customer WHERE ID = ?", new Object[]{id}, new BeanPropertyRowMapper(Customer.class));
+        List<Customer> c = jdbcTemplate.query("SELECT * FROM Customer NATURAL JOIN UserAbstraction WHERE ID = ?", new Object[]{id}, new BeanPropertyRowMapper(Customer.class));
         return c.size() > 0 ? c.get(0) : null;
     }
 
     public List<Customer> getAllCustomers() {
-        List<Customer> customers = jdbcTemplate.query("SELECT * FROM Customer NATURAL JOIN User", new BeanPropertyRowMapper(Customer.class));
+        List<Customer> customers = jdbcTemplate.query("SELECT * FROM Customer NATURAL JOIN UserAbstraction", new BeanPropertyRowMapper(Customer.class));
         return customers;
     }
 
-    public boolean changeCustomerBalance(int amount){
-        Customer customer = searchCustomerFromId(currentUser.getID());
+    public boolean changeCustomerBalance(String customerID, int amount){
+        Customer customer = searchCustomerFromId(customerID);
         if(customer.getCredits() + amount >= 0) {
             jdbcTemplate.update("UPDATE Customer SET credits = credits + ? WHERE ID = ?", amount, currentUser.getID());
             return true;

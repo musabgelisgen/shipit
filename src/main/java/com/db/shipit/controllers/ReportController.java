@@ -68,7 +68,7 @@ public class ReportController {
 
     @GetMapping("/file_report")
     public String getReportInfo (
-            @RequestParam(value = "package_id", required = true) String package_id,
+            @RequestParam(value = "id", required = true) String package_id,
             @RequestParam(value = "issuer_id", required = true) String issuer_id,
             Model model){
 
@@ -89,7 +89,7 @@ public class ReportController {
     @PostMapping("/save_report")
     public String saveReport(Model model, @ModelAttribute("report") Report report){
         Report newReport = reportRepository.saveReport(report);
-        String redirect = "redirect:report?id=" + newReport.getReport_id();
+        String redirect = "redirect:report?id=" + newReport.getReport_id() + "&package_id=" + report.getPackage_id();
         return redirect;
     }
 
