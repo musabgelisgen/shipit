@@ -87,10 +87,11 @@ public class PackageRepository {
         List<Package> packages = jdbcTemplate.query("SELECT * FROM Branch B, Package P WHERE B.city_name = P.from_city AND P.package_id = ?", new Object[]{package_id },new BeanPropertyRowMapper(Package.class));
         List<Route> routes = jdbcTemplate.query("SELECT R.from_city, R.hub, R.to_city FROM Route AS R ,Package AS P WHERE P.from_city = R.from_city AND R.to_city=P.to_city  AND P.package_id = ? ", new Object[]{package_id },new BeanPropertyRowMapper(Route.class));
         String newCurrentCity="";
-        for (int i =0;i<routes.size();i++)
-        {
+        String destination = "";
+        for (int i =0;i<routes.size();i++) {
                 if(routes.get(i).getHub().equals(packages.get(0).getCurr_city())) {
                     newCurrentCity = packages.get(0).getTo_city();
+                    destination = packages.get(0).getTo_city();
                     break;
                 }
                 else if ((routes.get(i).getFrom_city()).equals(packages.get(0).getCurr_city())) {
@@ -101,12 +102,22 @@ public class PackageRepository {
                         newCurrentCity = routes.get(i).getHub();
                     break;
 
+
                 }
         }
         if(newCurrentCity.equals(""))
             System.out.println("No update");
-      else
-        jdbcTemplate.update("UPDATE Package SET curr_city = ? WHERE package_id = ? ; ",new Object[]{newCurrentCity,package_id} );
+      else{
+          if (destination.equals(newCurrentCity)){
+            jdbcTemplate.update("UPDATE Package SET status = ? WHERE package_id = ? ; ",new Object[]{"onBranch",package_id} );
+          }
+          else {
+            jdbcTemplate.update("UPDATE Package SET status = ? WHERE package_id = ? ; ",new Object[]{"onTransfer",package_id} );
+          }
+          jdbcTemplate.update("UPDATE Package SET curr_city = ? WHERE package_id = ? ; ",new Object[]{newCurrentCity,package_id} );
+        }
+
+
 
     }
 

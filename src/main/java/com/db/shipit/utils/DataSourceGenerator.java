@@ -168,5 +168,37 @@ public class DataSourceGenerator {
                 "FOREIGN KEY(report_id) REFERENCES Report(report_id)," +
                 "FOREIGN KEY(sender) REFERENCES User(ID));");
 
+        statement.executeUpdate("INSERT INTO Route VALUES" +
+                "('Izmir', 'Istanbul', 'Ankara')," +
+                "('Izmir', 'Ankara', 'Istanbul')," +
+                "('Izmir', 'Bodrum', 'Antalya')," +
+                "('Izmir', 'Trabzon', 'Izmir')," +
+                "('Izmir', 'Ankara', 'Trabzon')," +
+                "('Ankara', 'Izmir', 'Istanbul')," +
+                "('Ankara', 'Izmir', 'Antalya')," +
+                "('Ankara', 'Antalya', 'Bodrum')," +
+                "('Ankara', 'Izmir', 'Trabzon')," +
+                "('Ankara', 'Bodrum', 'Izmir')," +
+                "('Trabzon', 'Bodrum', 'Ankara')," +
+                "('Trabzon', 'Bodrum', 'Izmir')," +
+                "('Trabzon', 'Bodrum', 'Istanbul')," +
+                "('Trabzon', 'Ankara', 'Bodrum')," +
+                "('Trabzon', 'Bodrum', 'Antalya')," +
+                "('Istanbul', 'Bodrum', 'Antalya')," +
+                "('Istanbul', 'Bodrum', 'Ankara')," +
+                "('Istanbul', 'Bodrum', 'Trabzon')," +
+                "('Istanbul', 'Ankara', 'Bodrum')," +
+                "('Istanbul', 'Istanbul', 'Izmir')," +
+                "('Bodrum', 'Istanbul', 'Izmir')," +
+                "('Bodrum', 'Istanbul', 'Ankara')," +
+                "('Bodrum', 'Ankara', 'Istanbul')," +
+                "('Bodrum', 'Istanbul', 'Trabzon')," +
+                "('Bodrum', 'Istanbul', 'Antalya')," +
+                "('Antalya', 'Istanbul', 'Ankara')," +
+                "('Antalya', 'Istanbul', 'Trabzon')," +
+                "('Antalya', 'Istanbul', 'Izmir')," +
+                "('Antalya', 'Istanbul', 'Bodrum')," +
+                "('Antalya', 'Bodrum', 'Istanbul')");
+
     }
 }

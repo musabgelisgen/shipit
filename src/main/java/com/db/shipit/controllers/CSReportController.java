@@ -124,7 +124,6 @@ public class CSReportController {
         return "redirect:cs_reports";
     }
 
-
     @GetMapping("/cs_reports")
     public String getAllPackages (Model model) {
         List<Report> reports = reportRepository.getAllReportByCustomerS();
