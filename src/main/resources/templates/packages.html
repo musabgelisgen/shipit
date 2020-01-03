@@ -87,7 +87,7 @@
             <div th:if="${package.status == 'onBranch'}">
                 <td><a th:href="@{/packages(id=${package.package_id}, accept='1')}" class="btn btn-success">Accept</a></td>
                 <td><a th:href="@{/packages(id=${package.package_id}, decline='1')}" class="btn btn-danger">Decline</a></td>
-                <td><a th:href="@{/report(id=${package.package_id}, report='1')}" class="btn btn-warning">Report</a></td>
+                <td><a th:href="@{/file_report(id=${package.package_id}, issuer_id=${customer})}" class="btn btn-warning">Report</a></td>
             </div>
 
             <td><a th:href="@{/package(id=${package.package_id})}" class="btn btn-info">About</a></td>

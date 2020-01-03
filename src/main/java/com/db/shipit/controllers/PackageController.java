@@ -142,6 +142,7 @@ public class PackageController {
 
         List<Package> packages = packageRepository.getAllPackages(modifications);
         model.addAttribute("packages", packages);
+        model.addAttribute("customer", currentUser.getID());
 
             return "packages";
         }
