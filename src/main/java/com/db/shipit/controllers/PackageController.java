@@ -165,34 +165,4 @@ public class PackageController {
 
         return "package";
     }
-
-    @GetMapping("/top_senders")
-    public String getTopSenders (Model model) {
-        if(currentUser == null) {
-            model.addAttribute("user", new User());
-            return "login";
-        }
-        else if(customerRepository.searchCustomerFromId(currentUser.getID()) == null) {
-            Map<String, String> top_senders = packageRepository.getTopSenders();
-            model.addAttribute("top_senders", top_senders);
-            return "top_senders";
-        }
-        else
-            return "redirect:/my_account";
-    }
-
-    @GetMapping("/branch_statistics")
-    public String getBranchStatistics (Model model) {
-        if(currentUser == null) {
-            model.addAttribute("user", new User());
-            return "login";
-        }
-        else if(customerRepository.searchCustomerFromId(currentUser.getID()) == null) {
-            Map<String, String> branchStatistics = packageRepository.getBranchStatistics();
-            model.addAttribute("branchStatistics", branchStatistics);
-            return "branchStatistics";
-        }
-        else
-            return "redirect:/my_account";
-    }
 }
