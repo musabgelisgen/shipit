@@ -49,7 +49,7 @@ public class PackageRepository {
     }
 
     public Map<String, String> getTopSenders(){
-        Map<String, String> list = (Map<String, String>) jdbcTemplate.query("SELECT sender_id, COUNT(package_id) AS total_packages FROM  Package  GROUP BY sender_id ORDER BY total_packages DESC", new BeanPropertyRowMapper(Package.class));
+        Map<String, String> list = (Map<String, String>) jdbcTemplate.query("SELECT sender_id, COUNT(package_id) AS total_packages FROM  PackagePreview  GROUP BY sender_id ORDER BY total_packages DESC", new BeanPropertyRowMapper(Package.class));
         return list;
     }
 
@@ -131,4 +131,5 @@ public class PackageRepository {
         List<Package> query = jdbcTemplate.query("SELECT * FROM Package WHERE package_id = ?", new Object[]{id}, new BeanPropertyRowMapper(Package.class));
         return query.size() > 0 ? query.get(0) : null;
     }
+
 }
