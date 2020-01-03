@@ -36,13 +36,12 @@ public class StatisticsController {
             model.addAttribute("user", new User());
             return "login";
         }
-        else if(customerRepository.searchCustomerFromId(currentUser.getID()) == null) {
-            List<Map<String, Object>> top_senders = packageRepository.getTopSenders();
-            model.addAttribute("top_senders", top_senders);
-            return "top_senders";
-        }
-        else
-            return "redirect:/my_account";
+
+        List<Map<String, Object>> top_senders = packageRepository.getTopSenders();
+        model.addAttribute("top_senders", top_senders);
+        return "top_senders";
+
+
     }
 
     @GetMapping("/branch_statistics")

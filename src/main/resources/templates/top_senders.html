@@ -53,10 +53,10 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="top_sender, iStat : ${top_senders.keySet()}">
+        <tr th:each="top_sender, iStat : ${top_senders}">
             <th scope="row" th:text="${iStat.index + 1}" th:value="${iStat.index + 1}"></th>
-            <td th:text="${top_sender.getValue()}"></td>
-            <td th:text="${top_sender.total_packages}"></td>
+            <td th:text="${top_sender.values()[0]}"></td>
+            <td th:text="${top_sender.values()[1]}"></td>
 
         </tr>
         </tbody>
