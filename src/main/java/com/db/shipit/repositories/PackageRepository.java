@@ -96,6 +96,32 @@ public class PackageRepository {
                 .setFrom_city(from)
                 .setCurr_city(from)
                 .setTo_city(to_city);
+
+        String packageType = packet.getPackage_type();
+        String deliveryType = packet.getDelivery_type();
+        
+        double cost = 0;
+        if (packageType.equals("lightweight")){
+            cost = cost + 5;
+        }
+        else if (packageType.equals("medium")){
+            cost = cost + 7;
+        }
+        else if (packageType.equals("heavy")){
+            cost = cost + 10;
+        }
+
+        if (deliveryType.equals("normal")){
+            cost = cost + 5;
+        }
+        else if (deliveryType.equals("fast")){
+            cost = cost + 8;
+        }
+        else if (deliveryType.equals("superfast")){
+            cost = cost + 10;
+        }
+
+        packet.setCost(cost);
     }
     public ArrayList<Boolean>  getIfReportExist(List<Package>packages){
         ArrayList<Boolean> list =new ArrayList<>();

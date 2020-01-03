@@ -1,6 +1,8 @@
 package com.db.shipit.controllers;
 import com.db.shipit.models.Message;
 import com.db.shipit.models.Report;
+import com.db.shipit.models.User;
+import com.db.shipit.repositories.CustomerRepository;
 import com.db.shipit.repositories.PackageRepository;
 import com.db.shipit.repositories.ReportRepository;
 
@@ -10,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+
+import static com.db.shipit.ShipitApplication.currentUser;
 
 @Controller
 public class CSReportController {
@@ -45,16 +49,26 @@ public class CSReportController {
     @Autowired
     private PackageRepository packageRepository;
 
+    @Autowired
+    CustomerRepository customerRepository;
+
     @GetMapping("/cs_file_report")
     public String getReportInfo (
             @RequestParam(value = "package_id", required = true) String package_id,
             @RequestParam(value = "issuer_id", required = true) String issuer_id,
             Model model){
+        if(currentUser == null) {
+            model.addAttribute("user", new User());
+            return "login";
+        }
+        else if(customerRepository.searchCustomerFromId(currentUser.getID()) == null) {
+            Report report = new Report(null, null, issuer_id, package_id, null, null, null, null, null);
+            model.addAttribute("report", report);
 
-        Report report = new Report(null, null, issuer_id,package_id,null, null,null,null, null);
-        model.addAttribute("report", report);
-
-        return "cs_file_report";
+            return "cs_file_report";
+        }
+        else
+            return "redirect:/my_account";
     }
 
     @PostMapping("/cs_save_report")

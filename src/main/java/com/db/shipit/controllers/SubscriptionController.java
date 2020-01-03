@@ -51,11 +51,11 @@ public class SubscriptionController {
                 default:
                     cost = 50;
             }
-            if(customerRepository.getCustomerBalance() >= cost) {
 
-                customerRepository.changeCustomerBalance(-cost);
+
+            if(customerRepository.changeCustomerBalance(-cost))
                 subscriptionRepository.addSubscription(tierValue);
-            }
+
 
         }
         return "redirect:/my_subscriptions";

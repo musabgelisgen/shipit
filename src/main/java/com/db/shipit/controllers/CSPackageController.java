@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.db.shipit.ShipitApplication.currentUser;
+
 @Controller
 public class CSPackageController {
 
@@ -31,14 +33,23 @@ public class CSPackageController {
 
     @GetMapping("/cs_send_package")
     public String sendPackage (Model model){
-        List<String> receivers = customerRepository.getAllCustomers().stream().map(Customer::getIdAndFullName).collect(Collectors.toList());
-        model.addAttribute("receivers", receivers);
+        if(currentUser == null) {
+            model.addAttribute("user", new User());
+            return "login";
+        }
+        else if(customerRepository.searchCustomerFromId(currentUser.getID()) == null) {
+            List<String> receivers = customerRepository.getAllCustomers().stream().map(Customer::getIdAndFullName).collect(Collectors.toList());
+            model.addAttribute("receivers", receivers);
 
-        List<String> branches = branchRepository.getAllBranches().stream().map(Branch::getBranchAndCityName).collect(Collectors.toList());
-        model.addAttribute("branches", branches);
+            List<String> branches = branchRepository.getAllBranches().stream().map(Branch::getBranchAndCityName).collect(Collectors.toList());
+            model.addAttribute("branches", branches);
 
-        model.addAttribute("package", new Package());
-        return "cs_send_package";
+            model.addAttribute("package", new Package());
+            return "cs_send_package";
+        }
+        else{
+            return "redirect:/my_account";
+        }
     }
 
     @PostMapping("/cs_send_package")
@@ -64,20 +75,28 @@ public class CSPackageController {
             @RequestParam(value = "delivered", required = false, defaultValue = "false") boolean delivered,
             @RequestParam(value = "declined", required = false, defaultValue = "false") boolean declined,
             Model model){
+        if(currentUser == null) {
+            model.addAttribute("user", new User());
+            return "login";
+        }
+        else if(customerRepository.searchCustomerFromId(currentUser.getID()) == null) {
+            Map<String, Boolean> modifications = new HashMap<>();
+            modifications.put("receiver", receiver);
+            modifications.put("sender", sender);
+            modifications.put("preparing", preparing);
+            modifications.put("onTransfer", onTransfer);
+            modifications.put("onBranch", onBranch);
+            modifications.put("delivered", delivered);
+            modifications.put("declined", declined);
 
-        Map<String, Boolean> modifications = new HashMap<>();
-        modifications.put("receiver", receiver);
-        modifications.put("sender", sender);
-        modifications.put("preparing", preparing);
-        modifications.put("onTransfer", onTransfer);
-        modifications.put("onBranch", onBranch);
-        modifications.put("delivered", delivered);
-        modifications.put("declined", declined);
+            List<Package> packages = packageRepository.getAllBranchPackages(modifications);
+            model.addAttribute("packages", packages);
 
-        List<Package> packages = packageRepository.getAllBranchPackages(modifications);
-        model.addAttribute("packages", packages);
-
-        return "cs_packages";
+            return "cs_packages";
+        }
+        else{
+            return "redirect:/my_account";
+        }
     }
 
     @GetMapping("/cs_packages/{id}")

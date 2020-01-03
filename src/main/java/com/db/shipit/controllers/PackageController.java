@@ -1,13 +1,11 @@
 package com.db.shipit.controllers;
 
-import com.db.shipit.models.Branch;
-import com.db.shipit.models.Customer;
+import com.db.shipit.models.*;
 import com.db.shipit.models.Package;
-import com.db.shipit.models.User;
-import com.db.shipit.repositories.BranchRepository;
-import com.db.shipit.repositories.CustomerRepository;
-import com.db.shipit.repositories.PackageRepository;
-import com.db.shipit.repositories.UserRepository;
+import com.db.shipit.repositories.*;
+import com.db.shipit.utils.CourierPicker;
+import com.db.shipit.utils.DatePicker;
+import com.db.shipit.utils.RandomID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,23 +34,66 @@ public class PackageController {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    SubscriptionRepository subscriptionRepository;
+
     @GetMapping("/send_package")
     public String sendPackage (Model model){
-        List<String> receivers = customerRepository.getAllCustomers().stream().map(Customer::getIdAndFullName).collect(Collectors.toList());
-        model.addAttribute("receivers", receivers);
+        if(currentUser == null) {
+            model.addAttribute("user", new User());
+            return "login";
+        }
+        else if(customerRepository.searchCustomerFromId(currentUser.getID()) != null) {
+            List<String> receivers = customerRepository.getAllCustomers().stream().map(Customer::getIdAndFullName).collect(Collectors.toList());
+            model.addAttribute("receivers", receivers);
 
-        List<String> branches = branchRepository.getAllBranches().stream().map(Branch::getBranchAndCityName).collect(Collectors.toList());
-        model.addAttribute("branches", branches);
+            List<String> branches = branchRepository.getAllBranches().stream().map(Branch::getBranchAndCityName).collect(Collectors.toList());
+            model.addAttribute("branches", branches);
 
-        model.addAttribute("package", new Package());
-        return "send_package";
+            model.addAttribute("package", new Package());
+            return "send_package";
+        }
+        return "redirect:/my_account";
     }
 
     @PostMapping("/send_package")
     public String commitSendPackage (Model model, @ModelAttribute("package") Package packet){
+        String id = RandomID.generateUUID();
+        String receiverId = packet.getReceiver_id().substring(0, packet.getReceiver_id().indexOf('-'));
+        String paymentStatus = packet.getPayment_side().equalsIgnoreCase("sender") ? "paid" : "not paid";
+        String from = packet.getFrom_city().substring(packet.getFrom_city().indexOf('-') + 1);
+
+        Customer c = customerRepository.searchCustomerFromId(receiverId);
+        String to_city = c.getCity_name();
+
+        packet.setPackage_id(id)
+                .setReceiver_id(receiverId)
+                .setSender_id(currentUser.getID())
+                .setSend_date(DatePicker.getDate())
+                .setPayment_status(paymentStatus)
+                .setStatus("preparing")
+                .setCourier(CourierPicker.getRandomCourierName())
+                .setFrom_city(from)
+                .setCurr_city(from)
+                .setTo_city(to_city);
+
+        /*
+        String packageType = packet.getPackage_type();
+        String deliveryType = packet.getDelivery_type();
+         */
+        if(packet.getPayment_side().equals("sender")){
+            List<Subscription> subscriptions = subscriptionRepository.getSubscriptionByID(currentUser.getID());
+            Subscription latestSubscription = subscriptions.get(0);
+            if (latestSubscription.isIs_active()) {
+                Subscription currSubscription = latestSubscription;
+
+            }
+            customerRepository.changeCustomerBalance(- ((int) packet.getCost()));
+        }
+
         System.out.println(packet);
         packageRepository.commitPackage(packet);
-        return "send_package";
+        return "redirect:/packages";
     }
 
     @GetMapping("/packages")
@@ -69,14 +110,19 @@ public class PackageController {
             @RequestParam(value = "decline", required = false, defaultValue = "0") int decline,
             Model model){
 
-        Map<String, Boolean> modifications = new HashMap<>();
-        modifications.put("receiver", receiver);
-        modifications.put("sender", sender);
-        modifications.put("preparing", preparing);
-        modifications.put("onTransfer", onTransfer);
-        modifications.put("onBranch", onBranch);
-        modifications.put("delivered", delivered);
-        modifications.put("declined", declined);
+        if(currentUser == null) {
+            model.addAttribute("user", new User());
+            return "login";
+        }
+        else if(customerRepository.searchCustomerFromId(currentUser.getID()) != null) {
+            Map<String, Boolean> modifications = new HashMap<>();
+            modifications.put("receiver", receiver);
+            modifications.put("sender", sender);
+            modifications.put("preparing", preparing);
+            modifications.put("onTransfer", onTransfer);
+            modifications.put("onBranch", onBranch);
+            modifications.put("delivered", delivered);
+            modifications.put("declined", declined);
 
         if (accept == 1 || decline == 1)
             packageRepository.updatePackageStatus(id, accept, decline);
@@ -90,7 +136,10 @@ public class PackageController {
 
         model.addAttribute("packages", packages);
 
-        return "packages";
+            return "packages";
+        }
+        else
+            return "redirect:/my_account";
     }
 
     @GetMapping("/package")
@@ -122,19 +171,5 @@ public class PackageController {
         model.addAttribute("cost", cost);
 
         return "package";
-    }
-
-    @GetMapping("/top_senders")
-    public String getTopSenders (Model model) {
-        Map<String, String> top_senders = packageRepository.getTopSenders();
-        model.addAttribute("top_senders", top_senders);
-        return "top_senders";
-    }
-
-    @GetMapping("/branch_statistics")
-    public String getBranchStatistics (Model model) {
-        Map<String, String> branchStatistics = packageRepository.getBranchStatistics();
-        model.addAttribute("branchStatistics", branchStatistics);
-        return "branchStatistics";
     }
 }
