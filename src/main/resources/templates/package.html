@@ -127,10 +127,10 @@
                     <td th:classappend="${package.status == 'declined' || package.status == 'delivered'} ? 'bg-success' : none" style="text-align:center"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQV6g9F84fD6S25SgXduy98jTDYyZ8Jjh7bnkoARyrik3xcz1UN&s" alt="" width="60" height="60"></td>
                 </tr>
                 <tr>
-                    <td style="text-align:center" th:text="preparing"></td>
-                    <td style="text-align:center" th:text="onTransfer"></td>
-                    <td style="text-align:center" th:text="onBranch"></td>
-                    <td style="text-align:center" th:text="${package.status}"></td>
+                    <td style="text-align:center" th:text="Preparing"></td>
+                    <td style="text-align:center" th:text="OnTransfer"></td>
+                    <td style="text-align:center" th:text="OnBranch"></td>
+                    <td style="text-align:center" th:text="Delivered"></td>
                 </tr>
             </tbody>
         </table>

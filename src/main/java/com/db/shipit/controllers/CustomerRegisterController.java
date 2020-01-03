@@ -42,7 +42,7 @@ public class CustomerRegisterController {
         System.out.println(customer);
 
         customerRepository.saveCustomer(customer);
-        return "customer_register";
+        return "redirect:/";
     }
 
 
