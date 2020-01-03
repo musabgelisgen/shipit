@@ -55,10 +55,15 @@ public class AccountController {
         else if(customerRepository.searchCustomerFromId(currentUser.getID()) != null) {
             Customer customer = customerRepository.searchCustomerFromId(currentUser.getID());
             List<Subscription> subscriptions = subscriptionRepository.getSubscriptionByID(customer.getID());
-            Subscription sub = subscriptions.get(0);
+
+            Subscription sub = null;
             String custSubscription = "-";
-            if (sub.isIs_active())
-                custSubscription = sub.getID();
+            if (subscriptions.size() > 0) {
+                sub = subscriptions.get(0);
+                custSubscription = "-";
+                if (sub.isIs_active())
+                    custSubscription = sub.getID();
+            }
 
             model.addAttribute("customer", customer);
             model.addAttribute("custSubscription", custSubscription);

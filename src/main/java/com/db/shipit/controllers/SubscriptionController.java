@@ -69,11 +69,16 @@ public class SubscriptionController {
         }
         else if(customerRepository.searchCustomerFromId(currentUser.getID()) != null) {
             List<Subscription> subscriptions = subscriptionRepository.getSubscriptionByID(currentUser.getID());
-            Subscription latestSubscription = subscriptions.get(0);
-            Subscription currSubscription = null;
 
-            if (latestSubscription.isIs_active())
-                currSubscription = latestSubscription;
+            Subscription latestSubscription = null;
+            Subscription currSubscription = null;
+            if (subscriptions.size() > 0) {
+                latestSubscription = subscriptions.get(0);
+                currSubscription = null;
+
+                if (latestSubscription.isIs_active())
+                    currSubscription = latestSubscription;
+            }
 
             model.addAttribute("subscription", currSubscription);
 

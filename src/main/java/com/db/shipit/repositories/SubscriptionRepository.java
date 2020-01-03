@@ -61,7 +61,11 @@ public class SubscriptionRepository {
 
     public void addSubscription(int tier) throws ParseException {
         List<Subscription> subscriptions = getSubscriptionByID(currentUser.getID());
-        Subscription latestSubscription = subscriptions.get(0);
+        int sub_no = 0;
+        if(subscriptions.size() > 0){
+            Subscription latestSubscription = subscriptions.get(0);
+            sub_no = latestSubscription.getSubscriptionNumber();
+        }
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date today = new Date();
         Calendar cal = Calendar.getInstance();
@@ -71,7 +75,7 @@ public class SubscriptionRepository {
         String todayString = formatter.format(today);
         String newDateString = formatter.format(newDate);
 
-        jdbcTemplate.update("INSERT INTO Subscription VALUES (?,?,?,?,?,?,?)", latestSubscription.getID(), latestSubscription.getSubscriptionNumber() + 1,
+        jdbcTemplate.update("INSERT INTO Subscription VALUES (?,?,?,?,?,?,?)", currentUser.getID(), sub_no + 1,
                                                                                     tier, 0, todayString, newDateString, true);
     }
 
