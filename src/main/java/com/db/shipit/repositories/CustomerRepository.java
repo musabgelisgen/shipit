@@ -26,12 +26,12 @@ public class CustomerRepository {
     }
 
     public Customer searchCustomerFromId(String id){
-        List<Customer> c = jdbcTemplate.query("SELECT * FROM Customer WHERE ID = ?", new Object[]{id}, new BeanPropertyRowMapper(Customer.class));
+        List<Customer> c = jdbcTemplate.query("SELECT * FROM Customer NATURAL JOIN UserAbstraction WHERE ID = ?", new Object[]{id}, new BeanPropertyRowMapper(Customer.class));
         return c.size() > 0 ? c.get(0) : null;
     }
 
     public List<Customer> getAllCustomers() {
-        List<Customer> customers = jdbcTemplate.query("SELECT * FROM Customer NATURAL JOIN User", new BeanPropertyRowMapper(Customer.class));
+        List<Customer> customers = jdbcTemplate.query("SELECT * FROM Customer NATURAL JOIN UserAbstraction", new BeanPropertyRowMapper(Customer.class));
         return customers;
     }
 
