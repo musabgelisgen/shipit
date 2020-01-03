@@ -76,22 +76,22 @@ public class PackageController {
                 .setCurr_city(from)
                 .setTo_city(to_city);
 
-        /*
-        String packageType = packet.getPackage_type();
-        String deliveryType = packet.getDelivery_type();
-         */
+
         if(packet.getPayment_side().equals("sender")){
             List<Subscription> subscriptions = subscriptionRepository.getSubscriptionByID(currentUser.getID());
             Subscription latestSubscription = subscriptions.get(0);
-            if (latestSubscription.isIs_active()) {
-                Subscription currSubscription = latestSubscription;
-
+            if (latestSubscription.isIs_active() && (latestSubscription.getUsedPackageRights() < latestSubscription.getSubscriptionTier())) {
+                subscriptionRepository.updateTier(currentUser.getID());
+                packageRepository.commitPackage(packet);
             }
-            customerRepository.changeCustomerBalance(- ((int) packet.getCost()));
+            else if(customerRepository.changeCustomerBalance(currentUser.getID(), - ((int) packet.getCost())))
+                packageRepository.commitPackage(packet);
         }
+        else
+            packageRepository.commitPackage(packet);
 
         System.out.println(packet);
-        packageRepository.commitPackage(packet);
+
         return "redirect:/packages";
     }
 
@@ -123,8 +123,22 @@ public class PackageController {
             modifications.put("delivered", delivered);
             modifications.put("declined", declined);
 
-        if (accept == 1 || decline == 1)
-            packageRepository.updatePackageStatus(id, accept, decline);
+        if (accept == 1 || decline == 1) {
+            Package p = packageRepository.findPackageById(id);
+            if(accept == 1 && p.getPayment_side().equals("receiver")){
+                int cost = (int) p.getCost();
+                List<Subscription> subscriptions = subscriptionRepository.getSubscriptionByID(p.getReceiver_id());
+                Subscription latestSubscription = subscriptions.get(0);
+                if (latestSubscription.isIs_active() && (latestSubscription.getUsedPackageRights() < latestSubscription.getSubscriptionTier())) {
+                    subscriptionRepository.updateTier(p.getReceiver_id());
+                }
+                else if (customerRepository.changeCustomerBalance(currentUser.getID(), -cost))
+                    packageRepository.updatePackageStatus(id, accept, decline);
+            }
+            else{
+                packageRepository.updatePackageStatus(id, accept, decline);
+            }
+        }
 
         List<Package> packages = packageRepository.getAllPackages(modifications);
         model.addAttribute("packages", packages);

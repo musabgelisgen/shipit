@@ -68,7 +68,7 @@ public class ReportController {
 
     @GetMapping("/file_report")
     public String getReportInfo (
-            @RequestParam(value = "package_id", required = true) String package_id,
+            @RequestParam(value = "id", required = true) String package_id,
             @RequestParam(value = "issuer_id", required = true) String issuer_id,
             Model model){
 

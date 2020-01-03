@@ -59,7 +59,7 @@ public class PackageRepository {
     }
 
     public void commitPackage(Package packet) {
-        setPropertiesOfToInsert(packet);
+        //setPropertiesOfToInsert(packet);
 
         jdbcTemplate.update("INSERT INTO Package VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                 packet.getPackage_id(),
@@ -79,52 +79,6 @@ public class PackageRepository {
                 packet.getCost());
     }
 
-    private void setPropertiesOfToInsert(Package packet){
-        String id = RandomID.generateUUID();
-        String receiverId = packet.getReceiver_id().substring(0, packet.getReceiver_id().indexOf('-'));
-        String paymentStatus = packet.getPayment_side().equalsIgnoreCase("sender") ? "paid" : "not paid";
-        String from = packet.getFrom_city().substring(packet.getFrom_city().indexOf('-') + 1);
-
-        Customer c = customerRepository.searchCustomerFromId(receiverId);
-        String to_city = c.getCity_name();
-
-        packet.setPackage_id(id)
-                .setReceiver_id(receiverId)
-                .setSender_id(currentUser.getID())
-                .setSend_date(DatePicker.getDate())
-                .setPayment_status(paymentStatus)
-                .setStatus("preparing")
-                .setCourier(CourierPicker.getRandomCourierName())
-                .setFrom_city(from)
-                .setCurr_city(from)
-                .setTo_city(to_city);
-
-        String packageType = packet.getPackage_type();
-        String deliveryType = packet.getDelivery_type();
-        
-        double cost = 0;
-        if (packageType.equals("lightweight")){
-            cost = cost + 5;
-        }
-        else if (packageType.equals("medium")){
-            cost = cost + 7;
-        }
-        else if (packageType.equals("heavy")){
-            cost = cost + 10;
-        }
-
-        if (deliveryType.equals("normal")){
-            cost = cost + 5;
-        }
-        else if (deliveryType.equals("fast")){
-            cost = cost + 8;
-        }
-        else if (deliveryType.equals("superfast")){
-            cost = cost + 10;
-        }
-
-        packet.setCost(cost);
-    }
     public void moveForward(String package_id)
     {
         List<Package> packages = jdbcTemplate.query("SELECT * FROM Branch B, Package P WHERE B.city_name = P.from_city AND P.package_id = ?", new Object[]{package_id },new BeanPropertyRowMapper(Package.class));

@@ -57,7 +57,7 @@ public class SubscriptionRepository {
 
         jdbcTemplate.update("UPDATE Subscription SET end_date = ? WHERE ID = ? AND subscription_number = ?", newDateString, latestSubscription.getID(), latestSubscription.getSubscriptionNumber());
         jdbcTemplate.update("UPDATE Subscription SET used_package_rights = ? WHERE ID = ? AND subscription_number = ?", 0, latestSubscription.getID(), latestSubscription.getSubscriptionNumber());
-        customerRepository.changeCustomerBalance(-cost);
+        customerRepository.changeCustomerBalance(currentUser.getID(), -cost);
     }
 
     public void addSubscription(int tier) throws ParseException {
@@ -76,11 +76,18 @@ public class SubscriptionRepository {
                                                                                     tier, 0, todayString, newDateString, true);
     }
 
-    public void cancelSubscription() throws ParseException {
+    public void cancelSubscription(){
         List<Subscription> subscriptions = getSubscriptionByID(currentUser.getID());
         Subscription latestSubscription = subscriptions.get(0);
 
         jdbcTemplate.update("UPDATE Subscription SET is_active = ? WHERE ID = ? AND subscription_number = ?", false, latestSubscription.getID(), latestSubscription.getSubscriptionNumber());
+    }
+
+    public void updateTier(String customerID){
+        List<Subscription> subscriptions = getSubscriptionByID(customerID);
+        Subscription latestSubscription = subscriptions.get(0);
+
+        jdbcTemplate.update("UPDATE Subscription SET used_package_rights = ? WHERE ID = ? AND subscription_number = ?", latestSubscription.getUsedPackageRights() + 1, latestSubscription.getID(), latestSubscription.getSubscriptionNumber());
     }
 
 }

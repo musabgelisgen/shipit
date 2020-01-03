@@ -37,7 +37,7 @@
 
                 $("#cost-p").html(cost);
                 $("#cost-p").text(cost);
-                $("#cost-p").val(cost);
+                $("#cost_val").val(cost);
             });
 
             $("#delivery_type").change(function(){
@@ -156,9 +156,10 @@
 
         <!-- Show Cost -->
         <button id="cost-btn" class="btn btn-primary btn-sm" type="button" disabled>Cost</button>
-        <p id="cost-p" th:field="*{package_type}" th:name="cost" th:value="0">0</p>
+        <p id="cost-p">0</p>
+        <input id="cost_val" type="hidden" th:field="*{cost}" th:name="cost" th:value="0">
 
-        <button class="btn btn-success">Send Package!</button>
+        <button type="submit" class="btn btn-success">Send Package!</button>
 
 
     </form>
