@@ -26,7 +26,7 @@ public class CustomerServiceRepository {
     }
 
     public CustomerService searchCustomerServiceById(String id){
-        List<CustomerService> c = jdbcTemplate.query("SELECT * FROM CustomerService WHERE ID = ?", new Object[]{id}, new BeanPropertyRowMapper(CustomerService.class));
+        List<CustomerService> c = jdbcTemplate.query("SELECT * FROM CustomerService NATURAL JOIN User WHERE ID = ?", new Object[]{id}, new BeanPropertyRowMapper(CustomerService.class));
         return c.size() > 0 ? c.get(0) : null;
     }
 
