@@ -78,7 +78,6 @@
     </div>
     <div  th:if="${report.handler_id == userId }" class="row vertical-center-row">
         <form class="text-center border border-light p-10 center_div" ACTION='#' th:action="@{/cs_update_result}"   method="POST">
-
             <select th:name="result" class="custom-select controls" id="result">
                 <option th:value="positive" selected>positive</option>
                 <option th:value="negative" selected>negative</option>

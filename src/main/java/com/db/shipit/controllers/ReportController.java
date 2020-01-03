@@ -108,9 +108,6 @@ public class ReportController {
            return "login";
        }
        else if(customerRepository.searchCustomerFromId(currentUser.getID()) != null) {
-           Report report = reportRepository.getReportByID(id);
-           String courier = "-";
-           courier = packageRepository.getAPackageCourier(package_id);
            model.addAttribute("newMessage", new Message());
 //System.out.println(id);
            model.addAttribute("report", report);

@@ -73,21 +73,24 @@
             <td th:text="${package.sender_id}"></td>
             <td th:text="${package.send_date}"></td>
             <td th:text="${package.delivery_date}"></td>
-            <td th:text="${package.status}"><a th:href="@{/package(id=${package.package_id})}" > </td>
+            <td th:text="${package.status}"><a th:href="@{/package(id=${package.package_id})}" > </a></td>
 
             <div th:if="${package.status != 'onBranch'}">
                 <td><button class="btn btn-success" disabled>Accept</button></td>
                 <td><button class="btn btn-danger" disabled>Decline</button></td>
-                <td><button class="btn btn-warning" disabled>Report</button></td>
+                <td th:if="${exists[iStat.index] =='true' }">
+                <a><button class="btn btn-warning" disabled>Report</button></a> </td>
+                <td th:if="${exists[iStat.index] =='false' }">
+                    <p></p></td>
             </div>
+
             <div th:if="${package.status == 'onBranch'}">
                 <td><a th:href="@{/packages(id=${package.package_id}, accept='1')}" class="btn btn-success">Accept</a></td>
                 <td><a th:href="@{/packages(id=${package.package_id}, decline='1')}" class="btn btn-danger">Decline</a></td>
                 <td th:if="${exists[iStat.index] =='true' }">
-                        <td><a th:href="@{/report(id=${package.package_id}, report='1')}" class="btn btn-warning">Report</a></td>
-                <td th:if="${exists[iStat.index]!='false' }">
+                        <a th:href="@{/report(id=${package.package_id}, report='1')}" class="btn btn-warning">Report</a></td>
+                <td th:if="${exists[iStat.index]=='false' }">
                     <p></p></td>
-
             </div>
 
             <td><a th:href="@{/package(id=${package.package_id})}" class="btn btn-info">About</a></td>

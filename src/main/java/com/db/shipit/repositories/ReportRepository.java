@@ -111,11 +111,9 @@ public class ReportRepository {
         List<Report> reports = jdbcTemplate.query("SELECT * FROM Report WHERE issuer_id = ?", new Object[]{id},new BeanPropertyRowMapper(Report.class));
         return reports;
     }
-    public Report getAllReportsOfPackageID(String package_id) {
+    public List<Report> getAllReportsOfPackageID(String package_id) {
         String id = currentUser.getID();
-        Report d = (Report) jdbcTemplate.queryForObject("SELECT * FROM Report WHERE package_id = '437846' and issuer_id = '51572f'", new Object[]{},Report.class);
-
-        Report reports = jdbcTemplate.queryForObject("SELECT * FROM Report WHERE package_id = ? and issuer_id = ?", new Object[]{package_id,id},Report.class);
+        List<Report> reports = jdbcTemplate.query("SELECT * FROM Report WHERE package_id = ? and issuer_id = ?", new Object[]{package_id,id},new BeanPropertyRowMapper(Report.class));
         return reports;
     }
     public List<Report> getAllReportByCustomerS(){

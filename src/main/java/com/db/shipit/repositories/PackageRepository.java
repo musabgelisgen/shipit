@@ -21,6 +21,8 @@ import static com.db.shipit.ShipitApplication.currentUser;
 public class PackageRepository {
 
     @Autowired
+    ReportRepository reportRepository;
+    @Autowired
     CustomerRepository customerRepository;
 
     @Autowired
@@ -127,9 +129,9 @@ public class PackageRepository {
         ArrayList<Boolean> list =new ArrayList<>();
         for (Package packagee: packages ) {
             String packageId =packagee.getPackage_id();
-            ReportRepository reportRepository= new ReportRepository();
-          Report reports=reportRepository.getAllReportsOfPackageID(packageId);
-            if(reports==null)
+
+          List<Report> reports=reportRepository.getAllReportsOfPackageID(packageId);
+            if(reports.size()==0)
                list.add(new Boolean(true));
             else
                 list.add(new Boolean(false));
@@ -145,14 +147,20 @@ public class PackageRepository {
         {
                 if(routes.get(i).getHub().equals(packages.get(0).getCurr_city())) {
                     newCurrentCity = packages.get(0).getTo_city();
+                    jdbcTemplate.update("UPDATE Package SET status = ? WHERE package_id = ? ; ",new Object[]{"onBranch",package_id} );
                     break;
                 }
                 else if ((routes.get(i).getFrom_city()).equals(packages.get(0).getCurr_city())) {
 
                     if((routes.get(i).getHub()).equals("null"))
+                    {
+                        jdbcTemplate.update("UPDATE Package SET status = ? WHERE package_id = ? ; ",new Object[]{"onBranch",package_id} );
                         newCurrentCity = packages.get(0).getTo_city();
-                    else
+                    }
+                    else{
+                        jdbcTemplate.update("UPDATE Package SET status = ? WHERE package_id = ? ; ",new Object[]{"onTransfer",package_id} );
                         newCurrentCity = routes.get(i).getHub();
+                    }
                     break;
 
                 }
