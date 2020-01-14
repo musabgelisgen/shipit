@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.db</groupId>
     <artifactId>shipit</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>shipit</name>
     <description>Shipping company data management system</description>
 
